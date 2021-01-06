@@ -6,6 +6,7 @@ import SelectedOptionsController from '../../organisms/selectedOptions'
 import OptionsList from '../../organisms/optionsList'
 import { Row, Col } from 'react-bootstrap'
 import InfoCard from '../../atoms/InfoCard'
+import SmartAccountsCard from '../../organisms/smartAccountsCard'
 
 const Label = styled.div`
   font-weight: bold;
@@ -20,6 +21,11 @@ const Home = _props => {
           <InfoCard />
         </Col>
       </Row>
+      <Row className="mt-3">
+        <Col xs={12}>
+          <SmartAccountsCard />
+        </Col>
+      </Row>
       <Row className="mt-5 font-weight-bold">
         <Col xs={12} lg={4}>
           <Label>Options:</Label>
@@ -28,7 +34,7 @@ const Home = _props => {
           <Label>Your current strategy:</Label>
         </Col>
       </Row>
-      <Row className="mt-3">
+      <Row className="mt-2">
         <Col xs={12} lg={4}>
           <OptionsList />
         </Col>

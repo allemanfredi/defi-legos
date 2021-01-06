@@ -7,8 +7,8 @@ const InfoCard = () => {
   return (
     <Card>
       <Card.Body>
-        Defi legos allows you to create transactions composed of multiple interactions with the main Ethereum DEFI protocols.
-        All in a single TRANSACTION!!!
+        Defi legos allows you to create transactions composed of multiple interactions with the main Ethereum DEFI
+        protocols. All in a single TRANSACTION!!!
       </Card.Body>
     </Card>
   )
