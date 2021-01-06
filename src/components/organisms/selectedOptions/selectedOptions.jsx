@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import SelectedOptionCard from '../../atoms/selectedOptionCard'
 
 const mapStateToProps = _state => {
   return {
@@ -21,8 +22,6 @@ const SelectedOptions = ({ options }) => {
   const onDragUpdate = useCallback(() => {}, [])
   const onDragEnd = useCallback(() => {}, [])
 
-  console.log(options)
-
   return (
     <DragDropContext
       onBeforeCapture={onBeforeCapture}
@@ -34,19 +33,24 @@ const SelectedOptions = ({ options }) => {
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {options.map(({ method, name, id }, index) => (
-              <Draggable key={`${method}${name}`} draggableId={`${method}${name}`} index={index}>
+            {options.map((_option, index) => (
+              <Draggable
+                key={`${_option.method}${_option.name}`}
+                draggableId={`${_option.method}${_option.name}`}
+                index={index}
+              >
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
+                    className={index > 0 ? 'mt-3' : null}
                     /*style={getItemStyle(
                         snapshot.isDragging,
                         provided.draggableProps.style
                       )}*/
                   >
-                    {method}
+                    <SelectedOptionCard option={_option} />
                   </div>
                 )}
               </Draggable>

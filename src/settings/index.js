@@ -39,6 +39,20 @@ const settings =  {
         args: ['token', 'amount',],
         id: 5
       }
+    ],
+    aave: [
+      {
+        name: 'aave',
+        method: 'deposit',
+        args: ['token', 'amount'],
+        id: 6
+      },
+      {
+        name: 'aave',
+        method: 'withdraw',
+        args: ['token', 'amount'],
+        id: 7
+      }
     ]
   }
 }
