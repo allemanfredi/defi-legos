@@ -4,6 +4,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SelectedOptionCard from '../../atoms/selectedOptionCard'
+import { deleteOption } from '../../../actions/build-strategy/'
 
 const mapStateToProps = _state => {
   return {
@@ -12,10 +13,12 @@ const mapStateToProps = _state => {
 }
 
 const mapDispatchToProps = _dispatch => {
-  return {}
+  return {
+    deleteOption: _option => _dispatch(deleteOption(_option))
+  }
 }
 
-const SelectedOptions = ({ options }) => {
+const SelectedOptions = ({ options, deleteOption }) => {
   const onBeforeCapture = useCallback(() => {}, [])
   const onBeforeDragStart = useCallback(() => {}, [])
   const onDragStart = useCallback(() => {}, [])
@@ -50,7 +53,7 @@ const SelectedOptions = ({ options }) => {
                         provided.draggableProps.style
                       )}*/
                   >
-                    <SelectedOptionCard option={_option} />
+                    <SelectedOptionCard option={_option} onDelete={() => deleteOption(index)} />
                   </div>
                 )}
               </Draggable>
@@ -64,7 +67,8 @@ const SelectedOptions = ({ options }) => {
 }
 
 SelectedOptions.propTypes = {
-  options: PropTypes.array
+  options: PropTypes.array,
+  deleteOption: PropTypes.func
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptions)

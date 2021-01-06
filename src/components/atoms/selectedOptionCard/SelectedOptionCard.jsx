@@ -13,7 +13,7 @@ const Method = styled.span`
   font-weight: bold;
 `
 
-const SelectedOptionCard = ({ option: { method, name, args } }) => {
+const SelectedOptionCard = ({ option: { method, name, args }, onDelete }) => {
   return (
     <Card>
       <Card.Header>
@@ -24,8 +24,10 @@ const SelectedOptionCard = ({ option: { method, name, args } }) => {
           <Col xs={8} className="text-center my-auto">
             <Method>{method}</Method>
           </Col>
-          <Col xs={2} className="text-left my-auto">
-            Delete
+          <Col xs={2} className="text-left my-auto" onClick={onDelete}>
+            <button type="button" className="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </Col>
         </Row>
       </Card.Header>
@@ -41,7 +43,8 @@ const SelectedOptionCard = ({ option: { method, name, args } }) => {
 }
 
 SelectedOptionCard.propTypes = {
-  option: PropTypes.object.isRequired
+  option: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 export default SelectedOptionCard
