@@ -1,0 +1,34 @@
+$theme-colors: (
+    "danger": #DB494A,
+    "success": #009E73,
+    "secondary": #ff9f40
+);
+
+@import "~bootstrap/scss/bootstrap";
+
+.modal-content {
+    button {
+        width: 50px;
+        border-radius: 3px;
+        border-width: 2px;
+        border-style: solid;
+        border-image: initial;
+        font-weight: bold;
+        margin: 0px;
+        outline: 0px;
+        &:hover {
+            background-color: #6be2ffb0;
+            border-width: 2px;
+            border-style: solid;
+            border-image: initial;
+        };
+    }
+}
+
+.web3modal-provider-wrapper {
+    padding: 10px !important;
+}
+
+.web3modal-modal-card{
+    display: block !important;
+}
