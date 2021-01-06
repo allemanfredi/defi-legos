@@ -1,2 +1,2 @@
-import selectedOptions from './selectedOptions'
-export default selectedOptions
+import SelectedOptions from './SelectedOptions'
+export default SelectedOptions

@@ -1,31 +1,27 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }))
+const mapStateToProps = _state => {
+  return {
+    options: _state.buildStrategy.options
+  }
+}
 
-const selectedOptions = _props => {
-  const onBeforeCapture = useCallback(() => {
-    console.log('onBeforeCapture')
-  }, [])
-  const onBeforeDragStart = useCallback(() => {
-    console.log('onBeforeDragStart')
-  }, [])
-  const onDragStart = useCallback(() => {
-    console.log('onDragStart')
-  }, [])
-  const onDragUpdate = useCallback(() => {
-    console.log('onDragUpdate')
-  }, [])
-  const onDragEnd = useCallback(() => {
-    console.log('onDragEnd')
-  }, [])
+const mapDispatchToProps = _dispatch => {
+  return {}
+}
 
-  const items = getItems(10)
+const SelectedOptions = ({ options }) => {
+  const onBeforeCapture = useCallback(() => {}, [])
+  const onBeforeDragStart = useCallback(() => {}, [])
+  const onDragStart = useCallback(() => {}, [])
+  const onDragUpdate = useCallback(() => {}, [])
+  const onDragEnd = useCallback(() => {}, [])
+
+  console.log(options)
 
   return (
     <DragDropContext
@@ -38,8 +34,8 @@ const selectedOptions = _props => {
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {items.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
+            {options.map(({ method, name, id }, index) => (
+              <Draggable key={`${method}${name}`} draggableId={`${method}${name}`} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -50,7 +46,7 @@ const selectedOptions = _props => {
                         provided.draggableProps.style
                       )}*/
                   >
-                    {item.content}
+                    {method}
                   </div>
                 )}
               </Draggable>
@@ -63,4 +59,8 @@ const selectedOptions = _props => {
   )
 }
 
-export default selectedOptions
+SelectedOptions.propTypes = {
+  options: PropTypes.array
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptions)

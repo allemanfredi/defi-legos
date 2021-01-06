@@ -2,12 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
-import SelectedOptions from '../../organisms/selectedOptions'
+import SelectedOptionsController from '../../organisms/selectedOptions'
+import OptionsList from '../../organisms/optionsList'
+import { Row, Col } from 'react-bootstrap'
 
 const Home = _props => {
   return (
     <Container>
-      <SelectedOptions />
+      <Row className="mt-5">
+        <Col xs={8}>
+          <SelectedOptionsController />
+        </Col>
+        <Col xs={4}>
+          <OptionsList />
+        </Col>
+      </Row>
     </Container>
   )
 }
