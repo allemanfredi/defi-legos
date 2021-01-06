@@ -4,6 +4,9 @@ import settings from '../../../settings'
 import { connect } from 'react-redux'
 import { selectOption } from '../../../actions/build-strategy/'
 import PropTypes from 'prop-types'
+import Icon from '../../atoms/icon'
+import { Row, Col } from 'react-bootstrap'
+import Button from '../../atoms/button'
 
 const mapStateToProps = _state => {
   return {}
@@ -28,12 +31,33 @@ const OptionsList = ({ selectOption }) => {
     [showedInnerOption]
   )
 
+  const closeInnerOptions = useCallback(
+    _protocol => {
+      setShowedInnerOption({
+        ...showedInnerOption,
+        [_protocol]: false
+      })
+    },
+    [showedInnerOption]
+  )
+
   return (
     <ListGroup>
       {Object.keys(settings.options).map((_protocol, _index) => {
         return (
           <Fragment key={`${_protocol}${_index}`}>
-            <ListGroup.Item onClick={() => showInnerOptions(_protocol)}>{_protocol}</ListGroup.Item>
+            <ListGroup.Item
+              onClick={() =>
+                showedInnerOption[_protocol] ? closeInnerOptions(_protocol) : showInnerOptions(_protocol)
+              }
+            >
+              <Row>
+                <Col xs={3}>{_protocol}</Col>
+                <Col xs={9} className="text-right">
+                  <Icon icon={showedInnerOption[_protocol] ? 'up' : 'down'} color="#E3E3E3" />
+                </Col>
+              </Row>
+            </ListGroup.Item>
             {showedInnerOption[_protocol]
               ? Object.values(
                   settings.options[_protocol].map((_option, _index) => {

@@ -20,11 +20,11 @@ const DisconnectButton = styled(Button)`
 
 const Logo = styled.img`
   height: 30px;
-  width: 180px;
+  width: 30px;
 
   @media (min-width: 767.98px) {
-    height: 40px;
-    width: 240px;
+    height: 60px;
+    width: 100px;
   }
 `
 
@@ -42,7 +42,7 @@ const Header = ({ isConnected, address, onConnectWallet, onDisconnectWallet }) =
       className="sticky-top"
       bg="white"
       expand="lg"
-      style={{ height: '70px', zIndex: '2', background: 'white' }}
+      style={{ height: '70px', zIndex: '2', background: 'white', paddingTop: '30px' }}
       collapseOnSelect
     >
       <Container style={{ maxWidth: '1240px' }}>
@@ -54,7 +54,7 @@ const Header = ({ isConnected, address, onConnectWallet, onDisconnectWallet }) =
           }}
         >
           <div className="d-flex">
-            <Logo src="" alt="logo" />
+            <Logo src="../img/png/lego.png" alt="logo" />
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="header" />

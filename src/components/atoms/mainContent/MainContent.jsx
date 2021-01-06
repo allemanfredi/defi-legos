@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Content = styled.div`
+  margin-top: 120px;
   @media (max-width: 767.98px) {
     height: 100%;
     margin-bottom: 100px;
