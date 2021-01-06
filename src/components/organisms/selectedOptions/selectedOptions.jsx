@@ -4,7 +4,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SelectedOptionCard from '../../atoms/selectedOptionCard'
-import { deleteOption } from '../../../actions/build-strategy/'
+import { deleteOption, reorderOptions } from '../../../actions/build-strategy/'
 
 const mapStateToProps = _state => {
   return {
@@ -14,16 +14,20 @@ const mapStateToProps = _state => {
 
 const mapDispatchToProps = _dispatch => {
   return {
-    deleteOption: _option => _dispatch(deleteOption(_option))
+    deleteOption: _option => _dispatch(deleteOption(_option)),
+    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex)))
   }
 }
 
-const SelectedOptions = ({ options, deleteOption }) => {
+const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
   const onBeforeCapture = useCallback(() => {}, [])
   const onBeforeDragStart = useCallback(() => {}, [])
   const onDragStart = useCallback(() => {}, [])
   const onDragUpdate = useCallback(() => {}, [])
-  const onDragEnd = useCallback(() => {}, [])
+
+  const onDragEnd = useCallback(({ source, destination }) => {
+    reorderOptions(source.index, destination.index)
+  }, [])
 
   return (
     <DragDropContext
@@ -68,7 +72,8 @@ const SelectedOptions = ({ options, deleteOption }) => {
 
 SelectedOptions.propTypes = {
   options: PropTypes.array,
-  deleteOption: PropTypes.func
+  deleteOption: PropTypes.func,
+  reorderOptions: PropTypes.func
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptions)

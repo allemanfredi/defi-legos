@@ -1,4 +1,4 @@
-import { OPTION_SELECTED, OPTION_DELETED } from '../../constants'
+import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED } from '../../constants'
 
 const initialState = {
   options: []
@@ -10,9 +10,9 @@ const buildStrategyReducer = (_state = initialState, _action) => {
       options: [..._state.options, _action.payload.option]
     })
   }
-  if (_action.type === OPTION_DELETED) {
+  if (_action.type === OPTION_DELETED || _action.type === OPTIONS_REORDERED) {
     return Object.assign({}, _state, {
-      options: _state.options.filter((_, _index) => _action.payload.index !== _index)
+      options: _action.payload.options
     })
   }
   return _state

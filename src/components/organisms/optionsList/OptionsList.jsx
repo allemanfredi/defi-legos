@@ -15,11 +15,11 @@ const Logo = styled.img`
 
 const Method = styled.div`
   cursor: pointer;
-  text-align: center  
+  text-align: center;
 `
 
 const ClickableIcon = styled(Icon)`
-  cursor: pointer
+  cursor: pointer;
 `
 
 const mapStateToProps = _state => {

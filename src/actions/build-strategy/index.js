@@ -1,4 +1,5 @@
-import { OPTION_SELECTED, OPTION_DELETED } from '../../constants'
+import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED } from '../../constants'
+import store from '../../store'
 
 const selectOption = _option => {
   return {
@@ -9,13 +10,26 @@ const selectOption = _option => {
   }
 }
 
-const deleteOption = _index => {
+const deleteOption = _indexToDelete => {
   return {
     type: OPTION_DELETED,
     payload: {
-      index: _index
+      options: store.getState().buildStrategy.options.filter((_, _index) => _index !== _indexToDelete)
     }
   }
 }
 
-export { selectOption, deleteOption }
+const reorderOptions = (_startIndex, _endIndex) => {
+  const result = store.getState().buildStrategy.options
+  const [removed] = result.splice(_startIndex, 1)
+  const options = result.splice(_endIndex, 0, removed)
+
+  return {
+    type: OPTIONS_REORDERED,
+    payload: {
+      options
+    }
+  }
+}
+
+export { selectOption, deleteOption, reorderOptions }
