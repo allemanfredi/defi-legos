@@ -1,4 +1,4 @@
-import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED } from '../../constants'
+import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED, SET_OPTION_INPUTS } from '../../constants'
 import store from '../../store'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -23,6 +23,16 @@ const deleteOption = _id => {
   }
 }
 
+const setOptionInputs = (_inputs, _optionToUpdate) => {
+  const options = store.getState().buildStrategy.options
+  return {
+    type: SET_OPTION_INPUTS,
+    payload: {
+      options: options.map(_option => (_optionToUpdate.id === _option.id ? { ..._option, inputs: _inputs } : _option))
+    }
+  }
+}
+
 const reorderOptions = (_startIndex, _endIndex) => {
   const result = store.getState().buildStrategy.options
   const [removed] = result.splice(_startIndex, 1)
@@ -36,4 +46,4 @@ const reorderOptions = (_startIndex, _endIndex) => {
   }
 }
 
-export { selectOption, deleteOption, reorderOptions }
+export { selectOption, deleteOption, reorderOptions, setOptionInputs }

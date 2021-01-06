@@ -3,7 +3,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SelectedOptionCard from '../../atoms/selectedOptionCard'
-import { deleteOption, reorderOptions } from '../../../actions/build-strategy/'
+import { deleteOption, reorderOptions, setOptionInputs } from '../../../actions/build-strategy/'
 
 const mapStateToProps = _state => {
   return {
@@ -14,13 +14,12 @@ const mapStateToProps = _state => {
 const mapDispatchToProps = _dispatch => {
   return {
     deleteOption: _id => _dispatch(deleteOption(_id)),
-    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex)))
+    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex))),
+    setOptionInputs: (_inputs, _option) => _dispatch(setOptionInputs(_inputs, _option))
   }
 }
 
-const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
-  const [optionInputs, setOptionInputs] = useState({})
-
+const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInputs }) => {
   const onDragEnd = useCallback(
     ({ source, destination }) => {
       if (!source || !destination) return
@@ -29,12 +28,9 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
     [reorderOptions]
   )
 
-  const onChangeInputs = useCallback(
-    (_inputs, _option) => {
-      console.log(_inputs, _option)
-    },
-    [reorderOptions]
-  )
+  const onChangeInputs = useCallback((_inputs, _option) => {
+    setOptionInputs(_inputs, _option)
+  }, [])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -74,7 +70,8 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
 SelectedOptions.propTypes = {
   options: PropTypes.array,
   deleteOption: PropTypes.func,
-  reorderOptions: PropTypes.func
+  reorderOptions: PropTypes.func,
+  setOptionInputs: PropTypes.func
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptions)
