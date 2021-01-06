@@ -48,7 +48,7 @@ const connectWallet = () => {
         })
       }
     } catch (_err) {
-      console.error(`Error during connecting with a wallet: ${_err.message}`)
+      console.error(`Error during connecting with a wallet: ${_err}`)
     }
   }
 }

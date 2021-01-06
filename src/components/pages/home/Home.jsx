@@ -10,10 +10,10 @@ const Home = _props => {
   return (
     <Container>
       <Row className="mt-5">
-        <Col xs={8}>
+        <Col xs={12} lg={8}>
           <SelectedOptionsController />
         </Col>
-        <Col xs={4}>
+        <Col xs={12} lg={4}>
           <OptionsList />
         </Col>
       </Row>

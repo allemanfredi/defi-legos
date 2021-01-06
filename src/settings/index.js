@@ -1,5 +1,38 @@
 const settings =  {
+  optionNameToLabel: {
+    uniswap: 'Uniswap',
+    aave: 'AAVE',
+    instapool_v2: 'Instapool V2'
+  },
   options: {
+    aave: [
+      {
+        name: 'aave',
+        method: 'deposit',
+        args: ['token', 'amount'],
+        id: 6
+      },
+      {
+        name: 'aave',
+        method: 'withdraw',
+        args: ['token', 'amount'],
+        id: 7
+      }
+    ],
+    instapool_v2: [
+      {
+        name: 'instapool_v2',
+        method: 'flashBorrowAndCast',
+        args: ['token', 'amount', 'route', 'calldata'],
+        id: 4
+      },
+      {
+        name: 'instapool_v2',
+        method: 'flashPayback',
+        args: ['token', 'amount',],
+        id: 5
+      }
+    ],
     uniswap: [
       {
         name: 'uniswap',
@@ -26,34 +59,6 @@ const settings =  {
         id: 3
       }
     ],
-    instapool_v2: [
-      {
-        name: 'instapool_v2',
-        method: 'flashBorrowAndCast',
-        args: ['token', 'amount', 'route', 'calldata'],
-        id: 4
-      },
-      {
-        name: 'instapool_v2',
-        method: 'flashPayback',
-        args: ['token', 'amount',],
-        id: 5
-      }
-    ],
-    aave: [
-      {
-        name: 'aave',
-        method: 'deposit',
-        args: ['token', 'amount'],
-        id: 6
-      },
-      {
-        name: 'aave',
-        method: 'withdraw',
-        args: ['token', 'amount'],
-        id: 7
-      }
-    ]
   }
 }
 
