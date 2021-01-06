@@ -23,7 +23,7 @@ const settings =  {
       {
         name: 'instapool_v2',
         method: 'flashBorrowAndCast',
-        args: ['token', 'amount', 'route', 'calldata'],
+        args: ['token', 'amount', 'route'], // NOTE: calldata missing
         id: 4
       },
       {

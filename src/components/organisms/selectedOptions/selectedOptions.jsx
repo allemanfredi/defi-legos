@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -13,41 +13,36 @@ const mapStateToProps = _state => {
 
 const mapDispatchToProps = _dispatch => {
   return {
-    deleteOption: _option => _dispatch(deleteOption(_option)),
+    deleteOption: _id => _dispatch(deleteOption(_id)),
     reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex)))
   }
 }
 
 const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
-  const onBeforeCapture = useCallback(() => {}, [])
-  const onBeforeDragStart = useCallback(() => {}, [])
-  const onDragStart = useCallback(() => {}, [])
-  const onDragUpdate = useCallback(() => {}, [])
+  const [optionInputs, setOptionInputs] = useState({})
 
   const onDragEnd = useCallback(
     ({ source, destination }) => {
+      if (!source || !destination) return
       reorderOptions(source.index, destination.index)
     },
     [reorderOptions]
   )
 
+  const onChangeInputs = useCallback(
+    (_inputs, _option) => {
+      console.log(_inputs, _option)
+    },
+    [reorderOptions]
+  )
+
   return (
-    <DragDropContext
-      onBeforeCapture={onBeforeCapture}
-      onBeforeDragStart={onBeforeDragStart}
-      onDragStart={onDragStart}
-      onDragUpdate={onDragUpdate}
-      onDragEnd={onDragEnd}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable">
         {(provided, snapshot) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {options.map((_option, index) => (
-              <Draggable
-                key={`${_option.method}${_option.name}`}
-                draggableId={`${_option.method}${_option.name}`}
-                index={index}
-              >
+              <Draggable key={_option.id} draggableId={_option.id} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -59,7 +54,11 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
                         provided.draggableProps.style
                       )}*/
                   >
-                    <SelectedOptionCard option={_option} onDelete={() => deleteOption(index)} />
+                    <SelectedOptionCard
+                      option={_option}
+                      onChange={_inputs => onChangeInputs(_inputs, _option)}
+                      onDelete={() => deleteOption(_option.id)}
+                    />
                   </div>
                 )}
               </Draggable>

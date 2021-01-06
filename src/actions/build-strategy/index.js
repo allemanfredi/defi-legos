@@ -1,20 +1,24 @@
 import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED } from '../../constants'
 import store from '../../store'
+import { v4 as uuidv4 } from 'uuid'
 
 const selectOption = _option => {
   return {
     type: OPTION_SELECTED,
     payload: {
-      option: _option
+      option: {
+        ..._option,
+        id: uuidv4() // NOTE: ovewrite id in order to have it unique
+      }
     }
   }
 }
 
-const deleteOption = _indexToDelete => {
+const deleteOption = _id => {
   return {
     type: OPTION_DELETED,
     payload: {
-      options: store.getState().buildStrategy.options.filter((_, _index) => _index !== _indexToDelete)
+      options: store.getState().buildStrategy.options.filter(({ id }) => _id !== id)
     }
   }
 }

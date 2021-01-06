@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Card, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
+import { Card, Row, Col, InputGroup, Form } from 'react-bootstrap'
 
 const Logo = styled.img`
   height: 50px;
@@ -13,7 +13,16 @@ const Method = styled.span`
   font-weight: bold;
 `
 
-const SelectedOptionCard = ({ option: { method, name, args }, onDelete }) => {
+const SelectedOptionCard = ({ option: { method, name, args }, onDelete, onChange }) => {
+  const [inputs, setInputs] = useState([])
+
+  const onChangeInput = useCallback((_value, _index) => {
+    const newInputs = inputs.slice()
+    newInputs[_index] = _value
+    setInputs(newInputs)
+    onChange(newInputs)
+  })
+
   return (
     <Card>
       <Card.Header>
@@ -32,11 +41,22 @@ const SelectedOptionCard = ({ option: { method, name, args }, onDelete }) => {
         </Row>
       </Card.Header>
       <Card.Body>
-        <InputGroup>
-          {args.map(_arg => {
-            return <FormControl key={`${method}${_arg}`} placeholder={_arg} aria-label={_arg} />
-          })}
-        </InputGroup>
+        <Form>
+          <Form.Row>
+            <InputGroup>
+              {args.map((_arg, _index) => {
+                return (
+                  <Form.Control
+                    key={`${method}${_arg}`}
+                    placeholder={_arg}
+                    value={inputs[_index]}
+                    onChange={_e => onChangeInput(_e.target.value, _index)}
+                  />
+                )
+              })}
+            </InputGroup>
+          </Form.Row>
+        </Form>
       </Card.Body>
     </Card>
   )
@@ -44,7 +64,8 @@ const SelectedOptionCard = ({ option: { method, name, args }, onDelete }) => {
 
 SelectedOptionCard.propTypes = {
   option: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default SelectedOptionCard
