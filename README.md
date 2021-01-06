@@ -4,7 +4,7 @@
 
 # defi-legos
 
-Simple dashboard for interacting with Defi protocols through drag and drop
+Simple Dapp that allows to create single transactions composed of multiple interactions with the main DeFi  protocols.
 
 &nbsp;
 
