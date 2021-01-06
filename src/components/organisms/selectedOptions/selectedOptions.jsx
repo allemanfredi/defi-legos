@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import styled from 'styled-components'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -25,9 +24,12 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
   const onDragStart = useCallback(() => {}, [])
   const onDragUpdate = useCallback(() => {}, [])
 
-  const onDragEnd = useCallback(({ source, destination }) => {
-    reorderOptions(source.index, destination.index)
-  }, [])
+  const onDragEnd = useCallback(
+    ({ source, destination }) => {
+      reorderOptions(source.index, destination.index)
+    },
+    [reorderOptions]
+  )
 
   return (
     <DragDropContext

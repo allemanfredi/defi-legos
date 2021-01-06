@@ -22,14 +22,12 @@ const mapDispatchToProps = _dispatch => {
   }
 }
 
-const HeaderController = _props => {
-  const { wallet, selectedPage, history, connectWallet, disconnectWallet } = _props
+const HeaderController = ({ wallet, selectedPage, history, connectWallet, disconnectWallet, setPage }) => {
   const { isConnected, account, provider } = wallet
-
   const { address } = useAddress(account)
 
   const onChangeSelectedPage = _page => {
-    _props.setPage(_page)
+    setPage(_page)
     history.push(_page)
   }
 

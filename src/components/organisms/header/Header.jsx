@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Navbar, Container, Nav, NavLink } from 'react-bootstrap'
 import Button from '../../atoms/button/'
@@ -16,6 +16,10 @@ const ConnectButton = styled(Button)`
 const DisconnectButton = styled(Button)`
   height: 50px;
   margin-left: 10px;
+  @media (min-width: 992px) {
+    width: 200px;
+    margin-top: 0;
+  }
 `
 
 const Logo = styled.img`
@@ -25,14 +29,6 @@ const Logo = styled.img`
   @media (min-width: 767.98px) {
     height: 60px;
     width: 100px;
-  }
-`
-
-const AccountInfo = styled.div`
-  margin-top: 20px;
-  display: flex;
-  @media (min-width: 992px) {
-    margin-top: 0;
   }
 `
 
@@ -61,10 +57,9 @@ const Header = ({ isConnected, address, onConnectWallet, onDisconnectWallet }) =
         <Navbar.Collapse id="header">
           <Nav className="mr-auto" />
           {isConnected ? (
-            <AccountInfo>
-              {address}
-              <DisconnectButton onClick={onDisconnectWallet} text="Disconnect" />
-            </AccountInfo>
+            <Fragment>
+              <DisconnectButton onClick={onDisconnectWallet} text={`Disconnect (${address})`} />
+            </Fragment>
           ) : (
             <React.Fragment>
               <div className="d-none d-lg-block">
