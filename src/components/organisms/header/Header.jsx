@@ -6,18 +6,14 @@ import styled from 'styled-components'
 
 const ConnectButton = styled(Button)`
   margin-top: 20px;
-  height: 50px;
   @media (min-width: 992px) {
-    width: 200px;
     margin-top: 0;
   }
 `
 
 const DisconnectButton = styled(Button)`
-  height: 50px;
   margin-left: 10px;
   @media (min-width: 992px) {
-    width: 200px;
     margin-top: 0;
   }
 `

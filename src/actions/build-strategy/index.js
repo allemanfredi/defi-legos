@@ -46,4 +46,13 @@ const reorderOptions = (_startIndex, _endIndex) => {
   }
 }
 
-export { selectOption, deleteOption, reorderOptions, setOptionInputs }
+const buildAndExecute = () => {
+  return {
+    type: 'TODO',
+    payload: {
+      TODO: 'TODO'
+    }
+  }
+}
+
+export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute }

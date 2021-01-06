@@ -7,13 +7,18 @@ import OptionsList from '../../organisms/optionsList'
 import { Row, Col } from 'react-bootstrap'
 import InfoCard from '../../atoms/InfoCard'
 import SmartAccountsCard from '../../organisms/smartAccountsCard'
+import Button from '../../atoms/button'
 
 const Label = styled.div`
   font-weight: bold;
   font-size: 16px;
 `
 
-const Home = _props => {
+const ExecuteButton = styled(Button)`
+  width: 100%;
+`
+
+const Home = ({ buildAndExecute }) => {
   return (
     <Container>
       <Row className="mt-3">
@@ -36,7 +41,16 @@ const Home = _props => {
       </Row>
       <Row className="mt-2">
         <Col xs={12} lg={4}>
-          <OptionsList />
+          <Row>
+            <Col xs={12}>
+              <ExecuteButton onClick={buildAndExecute} text={'Execute'} />
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col>
+              <OptionsList />
+            </Col>
+          </Row>
         </Col>
         <Col xs={12} lg={8}>
           <SelectedOptionsController />
@@ -46,6 +60,8 @@ const Home = _props => {
   )
 }
 
-Home.propTypes = {}
+Home.propTypes = {
+  buildAndExecute: PropTypes.func
+}
 
 export default Home
