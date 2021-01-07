@@ -9,6 +9,7 @@ import history from './utils/history'
 import * as serviceWorker from './serviceWorker'
 
 import './styles/styles.scss'
+import 'react-resizable/css/styles.css'
 
 ReactDOM.render(
   <React.StrictMode>

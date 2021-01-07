@@ -1,35 +1,56 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
 import SelectedOptions from '../../organisms/selectedOptions'
 import OptionsList from '../../organisms/optionsList'
 import { Row, Col } from 'react-bootstrap'
-import InfoCard from '../../atoms/InfoCard'
 import SmartAccountsCard from '../../organisms/smartAccountsCard'
 import Button from '../../atoms/button'
 
 const MainContainer = styled(Container)`
-  max-width: 1700px !important;
+  max-width: 1900px !important;
+  padding-top: 20px;
 `
 
-const Label = styled.div`
-  font-weight: bold;
-  font-size: 16px;
+const ConnectButton = styled(Button)`
+  width: 100%;
+`
+
+const DisconnectButton = styled(Button)`
+  width: 100%;
 `
 
 const ExecuteButton = styled(Button)`
   width: 100%;
 `
 
-const Home = ({ buildAndExecute }) => {
+const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDisconnectWallet }) => {
   return (
     <MainContainer>
-      <Row className="mt-3">
-        <Col xs={12} lg={2}>
-          <Row className="mt-5 font-weight-bold">
+      <Row>
+        <Col xs={12} lg={10}>
+          <Row className="mt-2 font-weight-bold">
+            <Col xs={2}>
+              <img src="./img/png/lego.png" height={50} width={70} />
+            </Col>
             <Col xs={12}>
-              <Label>Options:</Label>
+              <SelectedOptions />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs={12} lg={2}>
+          <Row className="mt-2 font-weight-bold">
+            <Col xs={12}>
+              {isConnected ? (
+                <Fragment>
+                  <DisconnectButton onClick={onDisconnectWallet} text={`Disconnect (${address})`} />
+                </Fragment>
+              ) : (
+                <React.Fragment>
+                  <ConnectButton onClick={onConnectWallet} text={'connect'} />
+                </React.Fragment>
+              )}
             </Col>
           </Row>
           <Row className="mt-2 font-weight-bold">
@@ -48,25 +69,17 @@ const Home = ({ buildAndExecute }) => {
             </Col>
           </Row>
         </Col>
-        <Col xs={12} lg={10}>
-          <Row className="mt-5 font-weight-bold">
-            <Col xs={12}>
-              <Label>Your current strategy:</Label>
-            </Col>
-          </Row>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={12}>
-              <SelectedOptions />
-            </Col>
-          </Row>
-        </Col>
       </Row>
     </MainContainer>
   )
 }
 
 Home.propTypes = {
-  buildAndExecute: PropTypes.func
+  buildAndExecute: PropTypes.func,
+  selectedPage: PropTypes.string,
+  onConnectWallet: PropTypes.func,
+  onDisconnectWallet: PropTypes.func,
+  isConnected: PropTypes.bool
 }
 
 export default Home

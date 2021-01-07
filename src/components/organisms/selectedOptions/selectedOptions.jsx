@@ -60,15 +60,22 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
   }, [])
 
   const onDisableDraggable = useCallback((_disabledDraggable, { id }) => {
-    console.log(_disabledDraggable)
+    console.log({
+      ...disabledDraggable,
+      [id]: _disabledDraggable
+    })
     setDisabledDraggable({
       ...disabledDraggable,
       [id]: _disabledDraggable
     })
   }, [])
 
+  const onDrawLine = useCallback(_e => {
+    console.log(_e)
+  }, [])
+
   return (
-    <OptionsBox>
+    <div>
       {/*<DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
@@ -115,12 +122,13 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
               option={_option}
               onChange={_inputs => onChangeInputs(_inputs, _option)}
               onDelete={() => deleteOption(_option.id)}
-              onDisableDraggable={_disabledDraggable => onDisableDraggable(_disabledDraggable, _option)}
+              //onDisableDraggable={_disabledDraggable => onDisableDraggable(_disabledDraggable, _option)} TODO
+              onDrawLine={_e => onDrawLine(_e, _option)}
             />
           </div>
         </Draggable>
       ))}
-    </OptionsBox>
+    </div>
   )
 }
 

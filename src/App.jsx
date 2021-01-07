@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import HomeController from './components/pages/home'
 import MainContent from './components/atoms/mainContent/'
-import HeaderController from './components/organisms/header'
 import { useChainId } from './hooks/use-chain-id'
 import { resetBuildError } from './actions/build-strategy'
 
@@ -44,7 +43,6 @@ const App = ({ chainId, buildError, resetBuildError }) => {
           render={() => {
             return (
               <React.Fragment>
-                <HeaderController />
                 <MainContent>
                   <HomeController />
                 </MainContent>

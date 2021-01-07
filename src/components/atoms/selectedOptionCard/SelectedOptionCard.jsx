@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Card as BootstrapCard, Row, Col, InputGroup, Form } from 'react-bootstrap'
 import { Card, CardHeader } from '../../atoms/card'
-import { Resizable, ResizableBox } from 'react-resizable'
+import { ResizableBox } from 'react-resizable'
+
 import 'react-resizable/css/styles.css'
 
 const Logo = styled.img`
@@ -20,8 +21,19 @@ const StyledCard = styled(Card)`
   cursor: pointer;
 `
 
-const SelectedOptionCard = ({ option: { method, name, args }, onDelete, onChange, onDisableDraggable }) => {
+const Circle = styled.div`
+  height: 30px;
+  width: 30px;
+  background: red;
+  border-radius: 50%;
+`
+
+const SelectedOptionCard = ({ option: { method, name, args }, onDelete, onChange, onDisableDraggable, onDrawLine }) => {
   const [inputs, setInputs] = useState([])
+
+  useEffect(() => {
+    // Your code here
+  }, [])
 
   const onChangeInput = useCallback((_value, _index) => {
     const newInputs = inputs.slice()
@@ -34,8 +46,9 @@ const SelectedOptionCard = ({ option: { method, name, args }, onDelete, onChange
     <ResizableBox
       width={450}
       height={151}
-      onResizeStart={() => onDisableDraggable(true)}
-      onResizeStop={() => onDisableDraggable(false)}
+      /*onResizeStart={() => onDisableDraggable(true)}
+      onResize={() => onDisableDraggable(true)}
+      onResizeStop={() => onDisableDraggable(false)}*/ // TODO
     >
       <StyledCard>
         <CardHeader>
@@ -43,7 +56,10 @@ const SelectedOptionCard = ({ option: { method, name, args }, onDelete, onChange
             <Col xs={2}>
               <Logo src={`../img/png/${name}.png`} alt="logo" />
             </Col>
-            <Col xs={8} className="text-center my-auto">
+            <Col xs={4} className="text-center my-auto">
+              <Circle onClick={onDrawLine} />
+            </Col>
+            <Col xs={4} className="text-center my-auto">
               <Method>{method}</Method>
             </Col>
             <Col xs={2} className="text-left my-auto" onClick={onDelete}>
@@ -80,7 +96,8 @@ SelectedOptionCard.propTypes = {
   option: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onDisableDraggable: PropTypes.func.isRequired
+  onDisableDraggable: PropTypes.func.isRequired,
+  onDrawLine: PropTypes.func.isRequired
 }
 
 export default SelectedOptionCard
