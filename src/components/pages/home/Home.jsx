@@ -29,17 +29,14 @@ const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDiscon
   return (
     <MainContainer>
       <Row>
-        <Col xs={12} lg={10}>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={2}>
-              <img src="./img/png/lego.png" height={50} width={70} />
-            </Col>
+        <Col xs={12} lg={8} xl={10}>
+          <Row className="mt-2">
             <Col xs={12}>
               <SelectedOptions />
             </Col>
           </Row>
         </Col>
-        <Col xs={12} lg={2}>
+        <Col xs={12} lg={4} xl={2}>
           <Row className="mt-2 font-weight-bold">
             <Col xs={12}>
               {isConnected ? (

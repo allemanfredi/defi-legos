@@ -22,10 +22,10 @@ const SmartAccountsCard = ({ smartAccounts, isConnected }) => {
     <Card>
       <BootstrapCard.Body>
         <Row>
-          <Col xs={12} md={8}>
+          <Col xs={12} className="text-center">
             Your Selected Smart Account
           </Col>
-          <Col xs={12} md={4} className="font-weight-bold text-right">
+          <Col xs={12} className="font-weight-bold text-center">
             {address}
           </Col>
         </Row>

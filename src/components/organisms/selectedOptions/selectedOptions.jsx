@@ -1,23 +1,9 @@
-import React, { useCallback, useState, useRef } from 'react'
-//import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import React, { useCallback, useState, useRef, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SelectedOptionCard from '../../atoms/selectedOptionCard'
 import { deleteOption, reorderOptions, setOptionInputs } from '../../../actions/build-strategy/'
-import styled from 'styled-components'
 import Draggable from 'react-draggable'
-
-const OptionsBox = styled.div`
-  height: 650px;
-  width: 100%;
-  padding: 30px;
-  background: #fafafa;
-  border-radius: 5px;
-  overflow: auto;
-  @media (max-width: 767.98px) {
-    padding: 10px;
-  }
-`
 
 const mapStateToProps = _state => {
   return {
@@ -37,6 +23,7 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
   const nodeRef = useRef(null)
   const [disabledDraggable, setDisabledDraggable] = useState({})
   const [positions, setPositions] = useState({})
+  const [isDrawing, setIsDrawing] = useState(false)
   /*const onDragEnd = useCallback(
     ({ source, destination }) => {
       if (!source || !destination) return
@@ -59,7 +46,7 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
     })
   }, [])
 
-  const onDisableDraggable = useCallback((_disabledDraggable, { id }) => {
+  /*const onDisableDraggable = useCallback((_disabledDraggable, { id }) => {
     console.log({
       ...disabledDraggable,
       [id]: _disabledDraggable
@@ -68,48 +55,13 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
       ...disabledDraggable,
       [id]: _disabledDraggable
     })
-  }, [])
-
-  const onDrawLine = useCallback(_e => {
-    console.log(_e)
-  }, [])
+  }, [])*/
 
   return (
-    <div>
-      {/*<DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {options.map((_option, index) => (
-                <Draggable key={_option.id} draggableId={_option.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={index > 0 ? 'mt-3' : null}
-                      /*style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
-                    >
-                      <SelectedOptionCard
-                        option={_option}
-                        onChange={_inputs => onChangeInputs(_inputs, _option)}
-                        onDelete={() => deleteOption(_option.id)}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>*/}
-
+    <Fragment>
       {options.map((_option, index) => (
         <Draggable
+          key={`draggable-${_option.id}`}
           handle=".handle"
           defaultPosition={{ x: 0, y: 0 }}
           position={positions[_option.id]}
@@ -117,18 +69,17 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
           scale={1}
           onDrag={(_e, _ui) => onChangePositions(_e, _ui, _option)}
         >
-          <div className="handle" key={`draggable-${_option.id}`} ref={nodeRef}>
+          <div className="handle" ref={nodeRef}>
             <SelectedOptionCard
               option={_option}
               onChange={_inputs => onChangeInputs(_inputs, _option)}
               onDelete={() => deleteOption(_option.id)}
               //onDisableDraggable={_disabledDraggable => onDisableDraggable(_disabledDraggable, _option)} TODO
-              onDrawLine={_e => onDrawLine(_e, _option)}
             />
           </div>
         </Draggable>
       ))}
-    </div>
+    </Fragment>
   )
 }
 
