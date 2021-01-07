@@ -2,7 +2,8 @@ const settings =  {
   optionNameToLabel: {
     uniswap: 'Uniswap',
     aave: 'AAVE',
-    instapool_v2: 'Instapool V2'
+    instapool_v2: 'Instapool V2',
+    'curve-y': 'Curve Finance'
   },
   options: {
     aave: [
@@ -12,7 +13,6 @@ const settings =  {
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'number','number', 'number'],
-        id: 0
       },
       {
         name: 'aave',
@@ -20,7 +20,29 @@ const settings =  {
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'number','number', 'number'],
-        id: 1
+      }
+    ],
+    'curve-y': [
+      {
+        name: 'curve-y',
+        method: 'sell',
+        args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number','number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'curve-y',
+        method: 'deposit',
+        args: ['token', 'amount', 'unitAmt'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'curve-y',
+        method: 'withdraw',
+        args: ['token', 'amount', 'unitAmt'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number', 'number'],
       }
     ],
     instapool_v2: [
@@ -30,7 +52,6 @@ const settings =  {
         args: ['token', 'amount', 'protocol'], 
         additionalArgs: ['calldata'],
         argsType: ['address', 'number', 'number', 'calldata',],
-        id: 2
       },
       {
         name: 'instapool_v2',
@@ -38,7 +59,6 @@ const settings =  {
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'number','number', 'number'],
-        id: 3
       }
     ],
     uniswap: [
@@ -48,7 +68,6 @@ const settings =  {
         args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number','number', 'number'],
-        id: 4
       },
       {
         name: 'uniswap',
@@ -56,7 +75,6 @@ const settings =  {
         args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number','number', 'number'],
-        id: 5
       },
       {
         name: 'uniswap',
@@ -64,7 +82,6 @@ const settings =  {
         args: ['tokenA', 'tokenB', 'amtA', 'unitAmt', 'slippage'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number','number', 'number'],
-        id: 6
       },
       {
         name: 'uniswap',
@@ -72,7 +89,6 @@ const settings =  {
         args: ['tokenA', 'tokenB', 'uniAmt', 'unitAmtA', 'unitAmtB'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number','number', 'number'],
-        id: 7
       }
     ],
   }

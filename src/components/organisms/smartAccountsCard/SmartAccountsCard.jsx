@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Card, Row, Col } from 'react-bootstrap'
+import { Card as BootstrapCard, Row, Col } from 'react-bootstrap'
+import { Card } from '../../atoms/card'
+import { useAddress } from '../../../hooks/use-address'
 
 const mapStateToProps = _state => {
   return {
@@ -16,15 +17,16 @@ const mapDispatchToProps = _dispatch => {
 }
 
 const SmartAccountsCard = ({ smartAccounts, isConnected }) => {
+  const { address } = useAddress(smartAccounts[0] ? smartAccounts[0].address : null)
   return (
     <Card>
-      <Card.Body>
+      <BootstrapCard.Body>
         <Row>
-          <Col xs={12} md={6}>
+          <Col xs={12} md={8}>
             Your Selected Smart Account
           </Col>
-          <Col xs={12} md={6} className="font-weight-bold text-right">
-            {smartAccounts.length > 0 ? smartAccounts[0].address : '-'}
+          <Col xs={12} md={4} className="font-weight-bold text-right">
+            {address}
           </Col>
         </Row>
         {smartAccounts.length === 0 && isConnected ? (
@@ -39,7 +41,7 @@ const SmartAccountsCard = ({ smartAccounts, isConnected }) => {
             </Col>
           </Row>
         ) : null}
-      </Card.Body>
+      </BootstrapCard.Body>
     </Card>
   )
 }

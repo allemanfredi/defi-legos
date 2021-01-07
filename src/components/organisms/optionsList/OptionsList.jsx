@@ -16,6 +16,7 @@ const Logo = styled.img`
 const Method = styled.div`
   cursor: pointer;
   text-align: center;
+  font-weight: 400;
 `
 
 const ClickableIcon = styled(Icon)`
