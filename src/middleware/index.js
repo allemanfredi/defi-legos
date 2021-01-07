@@ -1,4 +1,4 @@
-import { WALLET_CONNECTED, WALLET_DISCONNECTED, WALLET_ACCOUNT_CHANGED, SMART_ACCOUNTS_LOADED } from '../constants'
+import { WALLET_CONNECTED, WALLET_DISCONNECTED, SMART_ACCOUNTS_LOADED } from '../constants'
 import DSA from 'dsa-sdk'
 import Web3 from 'web3'
 

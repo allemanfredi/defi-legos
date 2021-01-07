@@ -1,4 +1,12 @@
-import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED, SET_OPTION_INPUTS } from '../../constants'
+import {
+  OPTION_SELECTED,
+  OPTION_DELETED,
+  OPTIONS_REORDERED,
+  SET_OPTION_INPUTS,
+  BUILD_FAILED,
+  BUILD_SUCEEDED,
+  RESET_BUILD_ERROR
+} from '../../constants'
 import store from '../../store'
 import { v4 as uuidv4 } from 'uuid'
 import DSA from 'dsa-sdk'
@@ -22,6 +30,12 @@ const deleteOption = _id => {
     payload: {
       options: store.getState().buildStrategy.options.filter(({ id }) => _id !== id)
     }
+  }
+}
+
+const resetBuildError = () => {
+  return {
+    type: RESET_BUILD_ERROR
   }
 }
 
@@ -65,6 +79,8 @@ const buildAndExecute = () => {
       const spells = dsa.Spell()
 
       options.forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
+        if (!inputs) throw new Error('Invalid Input')
+
         const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
         for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
 
@@ -105,12 +121,12 @@ const buildAndExecute = () => {
 
         await dsa.cast(flashloanSpell)
 
-        return {
-          type: 'TODO',
+        /*_dispatch({
+          type: BUILD_SUCEEDED,
           payload: {
-            TODO: 'TODO'
+            promiEvent: dsa.cast(flashloanSpell)
           }
-        }
+        })*/
       } else {
         return {
           type: 'TODO',
@@ -120,9 +136,15 @@ const buildAndExecute = () => {
         }
       }
     } catch (_err) {
-      console.error(_err)
+      console.log(_err)
+      _dispatch({
+        type: BUILD_FAILED,
+        payload: {
+          error: _err.message ? _err.message : _err
+        }
+      })
     }
   }
 }
 
-export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute }
+export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute, resetBuildError }

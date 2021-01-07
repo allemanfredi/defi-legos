@@ -1,18 +1,37 @@
-import { OPTION_SELECTED, OPTION_DELETED, OPTIONS_REORDERED, SET_OPTION_INPUTS } from '../../constants'
+import {
+  OPTION_SELECTED,
+  OPTION_DELETED,
+  OPTIONS_REORDERED,
+  SET_OPTION_INPUTS,
+  BUILD_FAILED,
+  RESET_BUILD_ERROR
+} from '../../constants'
 
 const initialState = {
-  options: []
+  options: [],
+  error: null
 }
 
 const buildStrategyReducer = (_state = initialState, _action) => {
-  if (_action.type === OPTION_SELECTED) {
+  const { type, payload } = _action
+  if (type === OPTION_SELECTED) {
     return Object.assign({}, _state, {
-      options: [..._state.options, _action.payload.option]
+      options: [..._state.options, payload.option]
     })
   }
-  if (_action.type === OPTION_DELETED || _action.type === OPTIONS_REORDERED || _action.type === SET_OPTION_INPUTS) {
+  if (type === OPTION_DELETED || type === OPTIONS_REORDERED || type === SET_OPTION_INPUTS) {
     return Object.assign({}, _state, {
-      options: _action.payload.options
+      options: payload.options
+    })
+  }
+  if (type === BUILD_FAILED) {
+    return Object.assign({}, _state, {
+      error: payload.error
+    })
+  }
+  if (type === RESET_BUILD_ERROR) {
+    return Object.assign({}, _state, {
+      error: null
     })
   }
   return _state

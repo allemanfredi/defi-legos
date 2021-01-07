@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Home from './Home'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
