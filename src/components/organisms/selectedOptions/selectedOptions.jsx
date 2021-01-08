@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useRef, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import SelectedOptionCard from '../../atoms/selectedOptionCard'
-import { deleteOption, reorderOptions, setOptionInputs } from '../../../actions/build-strategy/'
+import SelectedOptionCard from '../selectedOptionCard'
+import { deleteOption, reorderOptions } from '../../../actions/build-strategy/'
 import Draggable from 'react-draggable'
 
 const mapStateToProps = _state => {
@@ -14,37 +14,42 @@ const mapStateToProps = _state => {
 const mapDispatchToProps = _dispatch => {
   return {
     deleteOption: _id => _dispatch(deleteOption(_id)),
-    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex))),
-    setOptionInputs: (_inputs, _option) => _dispatch(setOptionInputs(_inputs, _option))
+    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex)))
   }
 }
 
-const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInputs }) => {
+const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
   const nodeRef = useRef(null)
-  const [disabledDraggable, setDisabledDraggable] = useState({})
   const [positions, setPositions] = useState({})
-  const [isDrawing, setIsDrawing] = useState(false)
-  /*const onDragEnd = useCallback(
-    ({ source, destination }) => {
-      if (!source || !destination) return
-      reorderOptions(source.index, destination.index)
+  //const [disabledDraggable, setDisabledDraggable] = useState({})
+
+  const onChangePositions = useCallback(
+    (_e, { x, y }, { id }) => {
+      setPositions({
+        ...positions,
+        [id]: {
+          x,
+          y
+        }
+      })
     },
-    [reorderOptions]
-  )*/
+    [positions]
+  )
 
-  const onChangeInputs = useCallback((_inputs, _option) => {
-    setOptionInputs(_inputs, _option)
-  }, [])
+  const onDeletePositions = useCallback(
+    _option => {
+      const optionToDelete = positions[_option.id]
 
-  const onChangePositions = useCallback((_e, { x, y }, { id }) => {
-    setPositions({
-      ...positions,
-      [id]: {
-        x,
-        y
-      }
-    })
-  }, [])
+      const newOptions = options
+      delete newOptions[_option.id]
+      console.log(newOptions)
+      setPositions({
+        ...newOptions
+      })
+      deleteOption(_option)
+    },
+    [deleteOption]
+  )
 
   /*const onDisableDraggable = useCallback((_disabledDraggable, { id }) => {
     console.log({
@@ -61,19 +66,20 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
     <Fragment>
       {options.map((_option, index) => (
         <Draggable
+          ref={nodeRef}
           key={`draggable-${_option.id}`}
           handle=".handle"
           defaultPosition={{ x: 0, y: 0 }}
+          grid={[50, 50]}
           position={positions[_option.id]}
-          disabledDraggable={disabledDraggable[_option.id]}
+          //disabledDraggable={disabledDraggable[_option.id]}
           scale={1}
           onDrag={(_e, _ui) => onChangePositions(_e, _ui, _option)}
         >
           <div className="handle" ref={nodeRef}>
             <SelectedOptionCard
               option={_option}
-              onChange={_inputs => onChangeInputs(_inputs, _option)}
-              onDelete={() => deleteOption(_option.id)}
+              onDelete={() => onDeletePositions(_option)}
               //onDisableDraggable={_disabledDraggable => onDisableDraggable(_disabledDraggable, _option)} TODO
             />
           </div>
@@ -85,9 +91,8 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions, setOptionInput
 
 SelectedOptions.propTypes = {
   options: PropTypes.array,
-  deleteOption: PropTypes.func,
-  reorderOptions: PropTypes.func,
-  setOptionInputs: PropTypes.func
+  deleteOption: PropTypes.func.isRequired,
+  reorderOptions: PropTypes.func
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptions)

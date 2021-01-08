@@ -3,6 +3,7 @@ import {
   OPTION_DELETED,
   OPTIONS_REORDERED,
   SET_OPTION_INPUTS,
+  SET_OPTION_ORDER,
   BUILD_FAILED,
   BUILD_SUCEEDED,
   RESET_BUILD_ERROR
@@ -24,11 +25,17 @@ const selectOption = _option => {
   }
 }
 
-const deleteOption = _id => {
+const deleteOption = _option => {
+  /*const options = store.getState().buildStrategy.options
+  const optionToDelete = options.indexOf(({ id }) => _id === id)
+  
+
+  const newOptions = */
+
   return {
     type: OPTION_DELETED,
     payload: {
-      options: store.getState().buildStrategy.options.filter(({ id }) => _id !== id)
+      options: store.getState().buildStrategy.options.filter(({ id }) => _option.id !== id)
     }
   }
 }
@@ -45,6 +52,16 @@ const setOptionInputs = (_inputs, _optionToUpdate) => {
     type: SET_OPTION_INPUTS,
     payload: {
       options: options.map(_option => (_optionToUpdate.id === _option.id ? { ..._option, inputs: _inputs } : _option))
+    }
+  }
+}
+
+const setOptionOrder = (_order, _optionToUpdate) => {
+  const options = store.getState().buildStrategy.options
+  return {
+    type: SET_OPTION_ORDER,
+    payload: {
+      options: options.map(_option => (_optionToUpdate.id === _option.id ? { ..._option, order: _order } : _option))
     }
   }
 }
@@ -78,32 +95,34 @@ const buildAndExecute = () => {
 
       const spells = dsa.Spell()
 
-      options.forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
-        if (!inputs) throw new Error('Invalid Input')
+      options
+        .sort((_a, _b) => _a.order - _b.order)
+        .forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
+          if (!inputs) throw new Error('Invalid Input')
 
-        const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
-        for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
+          const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
+          for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
 
-        const realArgs = argsType.map((_type, _index) => {
-          switch (_type) {
-            case 'address': {
-              const address = dsa.tokens.info[fixedInputs[_index].toLowerCase()].address
-              if (!address) {
-                throw new Error('Invalid token')
+          const realArgs = argsType.map((_type, _index) => {
+            switch (_type) {
+              case 'address': {
+                const address = dsa.tokens.info[fixedInputs[_index].toLowerCase()].address
+                if (!address) {
+                  throw new Error('Invalid token')
+                }
+                return address
               }
-              return address
+              default:
+                return fixedInputs[_index]
             }
-            default:
-              return fixedInputs[_index]
-          }
-        })
+          })
 
-        spells.add({
-          connector: name,
-          method,
-          args: realArgs
+          spells.add({
+            connector: name,
+            method,
+            args: realArgs
+          })
         })
-      })
 
       if (withFlashloan) {
         const flashloanSpell = dsa.Spell()
@@ -147,4 +166,4 @@ const buildAndExecute = () => {
   }
 }
 
-export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute, resetBuildError }
+export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute, resetBuildError, setOptionOrder }
