@@ -25,7 +25,7 @@ const ExecuteButton = styled(Button)`
   width: 100%;
 `
 
-const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDisconnectWallet }) => {
+const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDisconnectWallet, smartAccount }) => {
   return (
     <MainContainer>
       <Row>
@@ -52,7 +52,7 @@ const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDiscon
           </Row>
           <Row className="mt-2 font-weight-bold">
             <Col xs={12}>
-              <ExecuteButton onClick={buildAndExecute} text={'Execute'} />
+              <ExecuteButton onClick={buildAndExecute} text={'Execute'} disabled={!isConnected || !smartAccount} />
             </Col>
           </Row>
           <Row className="mt-2">
@@ -76,7 +76,8 @@ Home.propTypes = {
   selectedPage: PropTypes.string,
   onConnectWallet: PropTypes.func,
   onDisconnectWallet: PropTypes.func,
-  isConnected: PropTypes.bool
+  isConnected: PropTypes.bool,
+  smartAccount: PropTypes.object
 }
 
 export default Home
