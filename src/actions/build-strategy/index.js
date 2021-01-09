@@ -1,4 +1,6 @@
 import {
+  NEW_STRATEGY_CREATED,
+  STRATEGY_SELECTED,
   OPTION_SELECTED,
   OPTION_DELETED,
   OPTIONS_REORDERED,
@@ -14,13 +16,37 @@ import { v4 as uuidv4 } from 'uuid'
 import DSA from 'dsa-sdk'
 import Web3 from 'web3'
 
+const createStrategy = _option => {
+  const strategies = store.getState().buildStrategy.strategies
+  return {
+    type: NEW_STRATEGY_CREATED,
+    payload: {
+      strategy: {
+        name: `strategy-${strategies.length}`,
+        id: uuidv4()
+      }
+    }
+  }
+}
+
+const selectStrategy = _strategy => {
+  return {
+    type: STRATEGY_SELECTED,
+    payload: {
+      strategy: _strategy
+    }
+  }
+}
+
 const selectOption = _option => {
+  const selectedStrategy = store.getState().buildStrategy.selectedStrategy
   return {
     type: OPTION_SELECTED,
     payload: {
       option: {
         ..._option,
-        id: uuidv4() // NOTE: ovewrite id in order to have it unique
+        id: uuidv4(),
+        strategy: selectedStrategy
       }
     }
   }
@@ -182,5 +208,7 @@ export {
   buildAndExecute,
   resetBuildError,
   setOptionOrder,
-  setOptionDisabled
+  setOptionDisabled,
+  createStrategy,
+  selectStrategy
 }

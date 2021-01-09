@@ -1,4 +1,6 @@
 import {
+  NEW_STRATEGY_CREATED,
+  STRATEGY_SELECTED,
   OPTION_SELECTED,
   OPTION_DELETED,
   OPTIONS_REORDERED,
@@ -11,13 +13,24 @@ import {
 } from '../../constants'
 
 const initialState = {
+  strategies: [],
   options: [],
-  error: null,
-  promiEvent: null
+  selectedStrategy: null,
+  error: null
 }
 
 const buildStrategyReducer = (_state = initialState, _action) => {
   const { type, payload } = _action
+  if (type === NEW_STRATEGY_CREATED) {
+    return Object.assign({}, _state, {
+      strategies: [..._state.strategies, payload.strategy]
+    })
+  }
+  if (type === STRATEGY_SELECTED) {
+    return Object.assign({}, _state, {
+      selectedStrategy: payload.strategy
+    })
+  }
   if (type === OPTION_SELECTED) {
     return Object.assign({}, _state, {
       options: [..._state.options, payload.option]

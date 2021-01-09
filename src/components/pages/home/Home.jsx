@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
-import SelectedOptions from '../../organisms/selectedOptions'
+import Strategies from '../../organisms/strategies'
 import OptionsList from '../../organisms/optionsList'
 import { Row, Col } from 'react-bootstrap'
 import SmartAccountsCard from '../../organisms/smartAccountsCard'
@@ -25,14 +25,26 @@ const ExecuteButton = styled(Button)`
   width: 100%;
 `
 
-const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDisconnectWallet, smartAccount }) => {
+const NewStrategyButton = styled(Button)`
+  width: 100%;
+`
+
+const Home = ({
+  buildAndExecute,
+  isConnected,
+  address,
+  onConnectWallet,
+  onDisconnectWallet,
+  smartAccount,
+  onNewStrategy
+}) => {
   return (
     <MainContainer>
       <Row>
         <Col xs={12} lg={8} xl={10}>
           <Row className="mt-2">
             <Col xs={12}>
-              <SelectedOptions />
+              <Strategies />
             </Col>
           </Row>
         </Col>
@@ -53,6 +65,11 @@ const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDiscon
           <Row className="mt-2 font-weight-bold">
             <Col xs={12}>
               <ExecuteButton onClick={buildAndExecute} text={'Execute'} disabled={!isConnected || !smartAccount} />
+            </Col>
+          </Row>
+          <Row className="mt-2 font-weight-bold">
+            <Col xs={12}>
+              <NewStrategyButton onClick={onNewStrategy} text={'New strategy'} />
             </Col>
           </Row>
           <Row className="mt-2">
@@ -77,7 +94,8 @@ Home.propTypes = {
   onConnectWallet: PropTypes.func,
   onDisconnectWallet: PropTypes.func,
   isConnected: PropTypes.bool,
-  smartAccount: PropTypes.object
+  smartAccount: PropTypes.object,
+  onNewStrategy: PropTypes.func
 }
 
 export default Home

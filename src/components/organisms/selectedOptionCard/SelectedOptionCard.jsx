@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -6,6 +6,12 @@ import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from
 import { Card } from '../../atoms/card'
 //import { ResizableBox } from 'react-resizable'
 import { setOptionInputs, setOptionOrder, setOptionDisabled } from '../../../actions/build-strategy/'
+
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
 
 const Logo = styled.img`
   height: 30px;
@@ -33,7 +39,7 @@ const StyledFormControl = styled(Form.Control)`
   font-size: 13px !important;
   border-color: #e9ecf2 !important;
   border-width: 1px !important;
-  padding: 0.5rem 0.75rem !important;
+  padding: 5px 10px 5px 10px !important;
 `
 
 const OrderBadge = styled(Badge)`
@@ -111,10 +117,6 @@ const SelectedOptionCard = ({
     setOptionDisabled(!disabled, option)
   }, [disabled])
 
-  useEffect(() => {
-    console.log('mounted')
-  }, [])
-
   return (
     /*<ResizableBox
       width={400}
@@ -145,8 +147,10 @@ const SelectedOptionCard = ({
           <Col xs={6} className="text-left my-auto">
             <Method>{method}</Method>
           </Col>
-          <Col xs={6} className="text-right my-auto d-flex">
+          <Col xs={3} className="my-auto pr-1">
             <OrderBadge>{order ? order : '-'}</OrderBadge>
+          </Col>
+          <Col xs={3} className="my-auto pl-1">
             <DisableButton onClick={onChangeDisable}>{disabled ? 'Enable' : 'Disable'}</DisableButton>
           </Col>
         </Row>
