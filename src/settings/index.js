@@ -3,7 +3,8 @@ const settings =  {
     uniswap: 'Uniswap',
     aave: 'AAVE',
     instapool_v2: 'Instapool V2',
-    'curve-y': 'Curve Finance'
+    'curve-y': 'Curve Finance',
+    maker: 'MakerDAO'
   },
   options: {
     aave: [
@@ -60,6 +61,78 @@ const settings =  {
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'number','number', 'number'],
       }
+    ],
+    maker: [
+      {
+        name: 'maker',
+        method: 'open',
+        args: ['collateralVault'],
+        additionalArgs: [],
+        argsType: ['string'],
+      },
+      {
+        name: 'maker',
+        method: 'close',
+        args: ['maker'],
+        additionalArgs: [],
+        argsType: ['number'],
+      },
+      {
+        name: 'maker',
+        method: 'deposit',
+        args: ['vault_id', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'withdraw',
+        args: ['vault_id', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'borrow',
+        args: ['vault_id', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'payback',
+        args: ['vault_id', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'transfer',
+        args: ['vaultId', 'nextOwner'],
+        additionalArgs: [],
+        argsType: ['number', 'address'],
+      },
+      {
+        name: 'maker',
+        method: 'exitDai',
+        args: ['vaultId', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'withdrawLiquidated',
+        args: ['vaultId', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number', 'number'],
+      },
+      {
+        name: 'maker',
+        method: 'depositDai',
+        args: ['amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['number', 'number', 'number'],
+      },
     ],
     uniswap: [
       {

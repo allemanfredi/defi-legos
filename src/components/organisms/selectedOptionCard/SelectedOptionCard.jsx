@@ -1,13 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from 'react-bootstrap'
 import { Card } from '../../atoms/card'
 //import { ResizableBox } from 'react-resizable'
 import { setOptionInputs, setOptionOrder, setOptionDisabled } from '../../../actions/build-strategy/'
-import { connect } from 'react-redux'
-
-import 'react-resizable/css/styles.css'
 
 const Logo = styled.img`
   height: 30px;
@@ -32,18 +30,13 @@ const StyledCard = styled(Card)`
 `
 
 const StyledFormControl = styled(Form.Control)`
-  font-size: 14px !important;
-  appearance: none;
-  background-color: #fff;
-  border-color: #e9ecf2;
-  border-width: 1px;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  font-size: 12px;
-  line-height: 1.25rem;
+  font-size: 13px !important;
+  border-color: #e9ecf2 !important;
+  border-width: 1px !important;
+  padding: 0.5rem 0.75rem !important;
 `
 
-const StrategyBadge = styled(Badge)`
+const OrderBadge = styled(Badge)`
   background: #ebf9ed;
   width: 100%;
   color: #42c655;
@@ -57,13 +50,15 @@ const DisableButton = styled(Button)`
   margin-left: 10px;
   background-color: #f0f1f5 !important;
   width: 100%;
-  color: #a4aec6 !important;
+  color: #7e8492 !important;
   padding: 0 !important;
-  font-weight: bold !important;
   border: 0 !important;
   &:focus {
     border: 0 !important;
     box-shadow: none !important;
+  }
+  &:hover {
+    background-color: #d4d4d4 !important;
   }
 `
 
@@ -100,7 +95,7 @@ const SelectedOptionCard = ({
       setInputs(newInputs)
       setOptionInputs(newInputs, option)
     },
-    [setOptionInputs, option]
+    [setOptionInputs, option, inputs]
   )
 
   const onChangeOrder = useCallback(
@@ -151,11 +146,11 @@ const SelectedOptionCard = ({
             <Method>{method}</Method>
           </Col>
           <Col xs={6} className="text-right my-auto d-flex">
-            <StrategyBadge>#1</StrategyBadge>
-            <DisableButton onClick={onChangeDisable}>{disabled ? 'ENABLE' : 'DISABLE'}</DisableButton>
+            <OrderBadge>{order ? order : '-'}</OrderBadge>
+            <DisableButton onClick={onChangeDisable}>{disabled ? 'Enable' : 'Disable'}</DisableButton>
           </Col>
         </Row>
-        <Form className="mt-3">
+        <Form className="mt-4">
           <Form.Row>
             <InputGroup>
               {args.map((_arg, _index) => {

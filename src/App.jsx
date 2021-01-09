@@ -4,7 +4,6 @@ import { useToasts } from 'react-toast-notifications'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import HomeController from './components/pages/home'
-import MainContent from './components/atoms/mainContent/'
 import { useChainId } from './hooks/use-chain-id'
 import { resetBuildError } from './actions/build-strategy'
 
@@ -41,13 +40,7 @@ const App = ({ chainId, buildError, resetBuildError }) => {
           exact
           path={'/'}
           render={() => {
-            return (
-              <React.Fragment>
-                <MainContent>
-                  <HomeController />
-                </MainContent>
-              </React.Fragment>
-            )
+            return <HomeController />
           }}
         />
         <Route render={() => <Redirect to="/" />} />

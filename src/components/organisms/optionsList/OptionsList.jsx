@@ -11,6 +11,7 @@ import styled from 'styled-components'
 const Logo = styled.img`
   height: 30px;
   width: 30px;
+  border-radius: 50%;
 `
 
 const Method = styled.div`
@@ -21,12 +22,22 @@ const Method = styled.div`
 
 const ClickableIcon = styled(Icon)`
   cursor: pointer;
+  width: 16px;
+  heigth: 16px;
+`
+
+const StyledListGroupItem = styled(ListGroup.Item)`
+  border: 1px solid rgb(0 0 0 / 6%);
+`
+
+const ContainerOptionList = styled.div`
+  max-height: 400px;
 `
 
 const mapStateToProps = _state => {
   return {}
 }
-
+//1px solid #ced4da
 const mapDispatchToProps = _dispatch => {
   return {
     selectOption: _option => _dispatch(selectOption(_option))
@@ -57,42 +68,45 @@ const OptionsList = ({ selectOption }) => {
   )
 
   return (
-    <ListGroup>
-      {Object.keys(settings.options).map((_protocol, _index) => {
-        return (
-          <Fragment key={`${_protocol}${_index}`}>
-            <ListGroup.Item
-              onClick={() =>
-                showedInnerOption[_protocol] ? closeInnerOptions(_protocol) : showInnerOptions(_protocol)
-              }
-            >
-              <Row>
-                <Col xs={3} className="text-center">
-                  <Logo src={`../img/png/${_protocol}.png`} alt="logo" />
-                </Col>
-                <Col xs={6} className="text-center my-auto font-weight-bold">
-                  {settings.optionNameToLabel[_protocol]}
-                </Col>
-                <Col xs={3} className="text-right">
-                  <ClickableIcon icon={showedInnerOption[_protocol] ? 'up' : 'down'} color="#696969" />
-                </Col>
-              </Row>
-            </ListGroup.Item>
-            {showedInnerOption[_protocol]
-              ? Object.values(
-                  settings.options[_protocol].map((_option, _index) => {
-                    return (
-                      <ListGroup.Item key={`inner-${_protocol}${_index}`} onClick={() => selectOption(_option)}>
-                        <Method>{_option.method}</Method>
-                      </ListGroup.Item>
-                    )
-                  })
-                )
-              : null}
-          </Fragment>
-        )
-      })}
-    </ListGroup>
+    <ContainerOptionList>
+      <ListGroup>
+        {Object.keys(settings.options).map((_protocol, _index) => {
+          return (
+            <Fragment key={`${_protocol}${_index}`}>
+              <StyledListGroupItem
+                withBorder={_index < Object.keys(settings.options).length - 1}
+                onClick={() =>
+                  showedInnerOption[_protocol] ? closeInnerOptions(_protocol) : showInnerOptions(_protocol)
+                }
+              >
+                <Row>
+                  <Col xs={3} className="text-center">
+                    <Logo src={`../img/png/${_protocol}.png`} alt="logo" />
+                  </Col>
+                  <Col xs={6} className="text-center my-auto font-weight-bold">
+                    {settings.optionNameToLabel[_protocol]}
+                  </Col>
+                  <Col xs={3} className="text-right my-auto">
+                    <ClickableIcon icon={showedInnerOption[_protocol] ? 'up' : 'down'} color="#7E8592" />
+                  </Col>
+                </Row>
+              </StyledListGroupItem>
+              {showedInnerOption[_protocol]
+                ? Object.values(
+                    settings.options[_protocol].map((_option, _index) => {
+                      return (
+                        <StyledListGroupItem key={`inner-${_protocol}${_index}`} onClick={() => selectOption(_option)}>
+                          <Method>{_option.method}</Method>
+                        </StyledListGroupItem>
+                      )
+                    })
+                  )
+                : null}
+            </Fragment>
+          )
+        })}
+      </ListGroup>
+    </ContainerOptionList>
   )
 }
 
