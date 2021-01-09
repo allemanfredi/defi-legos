@@ -74,7 +74,6 @@ const OptionsList = ({ selectOption }) => {
           return (
             <Fragment key={`${_protocol}${_index}`}>
               <StyledListGroupItem
-                withBorder={_index < Object.keys(settings.options).length - 1}
                 onClick={() =>
                   showedInnerOption[_protocol] ? closeInnerOptions(_protocol) : showInnerOptions(_protocol)
                 }
