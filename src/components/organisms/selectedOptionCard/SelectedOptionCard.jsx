@@ -26,7 +26,7 @@ const Method = styled.span`
 `
 
 const StyledCard = styled(Card)`
-  width: 400px;
+  width: 390px;
   cursor: move;
   cursor: grab;
   cursor: -moz-grab;
@@ -148,7 +148,7 @@ const SelectedOptionCard = ({
             <Method>{method}</Method>
           </Col>
           <Col xs={3} className="my-auto pr-1">
-            <OrderBadge>{order ? order : '-'}</OrderBadge>
+            {/*<OrderBadge>{order ? order : '-'}</OrderBadge>*/}
           </Col>
           <Col xs={3} className="my-auto pl-1">
             <DisableButton onClick={onChangeDisable}>{disabled ? 'Enable' : 'Disable'}</DisableButton>

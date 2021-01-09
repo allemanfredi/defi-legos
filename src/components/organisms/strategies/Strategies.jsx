@@ -17,7 +17,8 @@ const StrategiesContainerHeader = styled.div`
 `
 
 const StrategiesContainerBody = styled.div`
-  padding: 5px;
+  padding: 10px;
+  width: 400px;
 `
 
 const mapStateToProps = _state => {
@@ -92,7 +93,7 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
                     {options
                       .filter(_option => _option.strategy.id === strategies[_index].id)
                       .map((_option, index) => (
-                        <Draggable key={_option.id} draggableId={`draggable-${strategies[_index].id}`} index={index}>
+                        <Draggable key={_option.id} draggableId={`draggable-${_option.id}`} index={index}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
@@ -114,40 +115,6 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
         ))}
       </StrategiesContainer>
     </Fragment>
-
-    /*options.map((_strategy, _index) => {
-        return (
-          <div key={id}>
-            <StrategiesContainerBody>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId={`droppable-${id}`}>
-                  {(provided, snapshot) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {options
-                        .filter(_option => _option.strategyId === id)
-                        .map((_option, index) => (
-                          <Draggable key={_option.id} draggableId={`draggable-${id}`} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className={index > 0 ? 'mt-3' : null}
-                              >
-                                <SelectedOptionCard option={_option} onDelete={() => onDeleteOption(_option)} />
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </StrategiesContainerBody>
-          </div>
-        )
-      })*/
   )
 }
 

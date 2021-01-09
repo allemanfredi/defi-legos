@@ -1,10 +1,11 @@
-const settings =  {
+const settings = {
   optionNameToLabel: {
     uniswap: 'Uniswap',
     aave: 'AAVE',
     instapool_v2: 'Instapool V2',
     'curve-y': 'Curve Finance',
-    maker: 'MakerDAO'
+    maker: 'MakerDAO',
+    compound: 'Compound'
   },
   options: {
     aave: [
@@ -13,14 +14,65 @@ const settings =  {
         method: 'deposit',
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number','number', 'number'],
+        argsType: ['address', 'number', 'number', 'number']
       },
       {
         name: 'aave',
         method: 'withdraw',
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number','number', 'number'],
+        argsType: ['address', 'number', 'number', 'number']
+      }
+    ],
+    compound: [
+      {
+        name: 'compound',
+        method: 'deposit',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'withdraw',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'borrow',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'payback',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'liquidate',
+        args: ['borrower', 'tokenToPay', 'tokenInReturn', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'address', 'address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'depositCToken',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
+      },
+      {
+        name: 'compound',
+        method: 'withdrawCToken',
+        args: ['token', 'amount'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'number', 'number', 'number']
       }
     ],
     'curve-y': [
@@ -29,37 +81,37 @@ const settings =  {
         method: 'sell',
         args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number','number', 'number', 'number', 'number'],
+        argsType: ['address', 'number', 'number', 'number', 'number', 'number']
       },
       {
         name: 'curve-y',
         method: 'deposit',
         args: ['token', 'amount', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number', 'number', 'number', 'number'],
+        argsType: ['address', 'number', 'number', 'number', 'number']
       },
       {
         name: 'curve-y',
         method: 'withdraw',
         args: ['token', 'amount', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number', 'number', 'number', 'number'],
+        argsType: ['address', 'number', 'number', 'number', 'number']
       }
     ],
     instapool_v2: [
       {
         name: 'instapool_v2',
         method: 'flashBorrowAndCast',
-        args: ['token', 'amount', 'protocol'], 
+        args: ['token', 'amount', 'protocol'],
         additionalArgs: ['calldata'],
-        argsType: ['address', 'number', 'number', 'calldata',],
+        argsType: ['address', 'number', 'number', 'calldata']
       },
       {
         name: 'instapool_v2',
         method: 'flashPayback',
         args: ['token', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'number','number', 'number'],
+        argsType: ['address', 'number', 'number', 'number']
       }
     ],
     maker: [
@@ -68,71 +120,71 @@ const settings =  {
         method: 'open',
         args: ['collateralVault'],
         additionalArgs: [],
-        argsType: ['string'],
+        argsType: ['string']
       },
       {
         name: 'maker',
         method: 'close',
         args: ['maker'],
         additionalArgs: [],
-        argsType: ['number'],
+        argsType: ['number']
       },
       {
         name: 'maker',
         method: 'deposit',
         args: ['vault_id', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'withdraw',
         args: ['vault_id', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'borrow',
         args: ['vault_id', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'payback',
         args: ['vault_id', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'transfer',
         args: ['vaultId', 'nextOwner'],
         additionalArgs: [],
-        argsType: ['number', 'address'],
+        argsType: ['number', 'address']
       },
       {
         name: 'maker',
         method: 'exitDai',
         args: ['vaultId', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'withdrawLiquidated',
         args: ['vaultId', 'amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number', 'number'],
+        argsType: ['number', 'number', 'number', 'number']
       },
       {
         name: 'maker',
         method: 'depositDai',
         args: ['amount'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['number', 'number', 'number'],
-      },
+        argsType: ['number', 'number', 'number']
+      }
     ],
     uniswap: [
       {
@@ -140,30 +192,30 @@ const settings =  {
         method: 'buy',
         args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'address', 'number', 'number','number', 'number'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number']
       },
       {
         name: 'uniswap',
         method: 'sell',
         args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'address', 'number', 'number','number', 'number'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number']
       },
       {
         name: 'uniswap',
         method: 'deposit',
         args: ['tokenA', 'tokenB', 'amtA', 'unitAmt', 'slippage'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'address', 'number', 'number', 'number','number', 'number'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number']
       },
       {
         name: 'uniswap',
         method: 'withdraw',
         args: ['tokenA', 'tokenB', 'uniAmt', 'unitAmtA', 'unitAmtB'],
         additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'address', 'number', 'number', 'number','number', 'number'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number']
       }
-    ],
+    ]
   }
 }
 

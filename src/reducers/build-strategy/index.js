@@ -1,6 +1,7 @@
 import {
   NEW_STRATEGY_CREATED,
   STRATEGY_SELECTED,
+  STRATEGY_DELETED,
   OPTION_SELECTED,
   OPTION_DELETED,
   OPTIONS_REORDERED,
@@ -29,6 +30,12 @@ const buildStrategyReducer = (_state = initialState, _action) => {
   if (type === STRATEGY_SELECTED) {
     return Object.assign({}, _state, {
       selectedStrategy: payload.strategy
+    })
+  }
+  if (type === STRATEGY_DELETED) {
+    return Object.assign({}, _state, {
+      selectedStrategy: payload.selectedStrategy,
+      strategies: payload.strategies
     })
   }
   if (type === OPTION_SELECTED) {
