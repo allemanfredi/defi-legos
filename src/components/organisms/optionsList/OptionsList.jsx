@@ -28,6 +28,7 @@ const ClickableIcon = styled(Icon)`
 
 const StyledListGroupItem = styled(ListGroup.Item)`
   border: 1px solid rgb(0 0 0 / 6%);
+  cursor: pointer;
 `
 
 const ContainerOptionList = styled.div`

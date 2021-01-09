@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, Fragment } from 'react'
+import React, { useCallback, Fragment } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import SelectedOptionCard from '../selectedOptionCard'
@@ -14,6 +14,7 @@ const StrategiesContainerHeader = styled.div`
   border-bottom: 1px solid #ced4da;
   margin-bottom: 20px;
   padding: 10px;
+  cursor: pointer;
 `
 
 const StrategiesContainerBody = styled.div`
@@ -37,21 +38,6 @@ const mapDispatchToProps = _dispatch => {
 }
 
 const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectStrategy }) => {
-  const [positions, setPositions] = useState({})
-
-  const onChangePositions = useCallback(
-    (_e, { x, y }, { id }) => {
-      setPositions({
-        ...positions,
-        [id]: {
-          x,
-          y
-        }
-      })
-    },
-    [positions]
-  )
-
   const onDeleteOption = useCallback(
     _option => {
       /*const newOptions = options
