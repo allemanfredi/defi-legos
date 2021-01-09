@@ -4,6 +4,7 @@ import {
   OPTIONS_REORDERED,
   SET_OPTION_INPUTS,
   SET_OPTION_ORDER,
+  SET_OPTION_DISABLED,
   BUILD_FAILED,
   BUILD_SUCEEDED,
   RESET_BUILD_ERROR
@@ -26,12 +27,6 @@ const selectOption = _option => {
 }
 
 const deleteOption = _option => {
-  /*const options = store.getState().buildStrategy.options
-  const optionToDelete = options.indexOf(({ id }) => _id === id)
-  
-
-  const newOptions = */
-
   return {
     type: OPTION_DELETED,
     payload: {
@@ -66,6 +61,18 @@ const setOptionOrder = (_order, _optionToUpdate) => {
   }
 }
 
+const setOptionDisabled = (_disabled, _optionToUpdate) => {
+  const options = store.getState().buildStrategy.options
+  return {
+    type: SET_OPTION_DISABLED,
+    payload: {
+      options: options.map(_option =>
+        _optionToUpdate.id === _option.id ? { ..._option, disabled: _disabled } : _option
+      )
+    }
+  }
+}
+
 const reorderOptions = (_startIndex, _endIndex) => {
   const result = store.getState().buildStrategy.options
   const [removed] = result.splice(_startIndex, 1)
@@ -96,6 +103,7 @@ const buildAndExecute = () => {
       const spells = dsa.Spell()
 
       options
+        .filter(({ disabled }) => !disabled)
         .sort((_a, _b) => _a.order - _b.order)
         .forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
           if (!inputs) throw new Error('Invalid Input')
@@ -166,4 +174,13 @@ const buildAndExecute = () => {
   }
 }
 
-export { selectOption, deleteOption, reorderOptions, setOptionInputs, buildAndExecute, resetBuildError, setOptionOrder }
+export {
+  selectOption,
+  deleteOption,
+  reorderOptions,
+  setOptionInputs,
+  buildAndExecute,
+  resetBuildError,
+  setOptionOrder,
+  setOptionDisabled
+}

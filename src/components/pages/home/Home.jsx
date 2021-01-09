@@ -45,7 +45,7 @@ const Home = ({ buildAndExecute, isConnected, address, onConnectWallet, onDiscon
                 </Fragment>
               ) : (
                 <React.Fragment>
-                  <ConnectButton onClick={onConnectWallet} text={'connect'} />
+                  <ConnectButton onClick={onConnectWallet} text={'Connect'} />
                 </React.Fragment>
               )}
             </Col>

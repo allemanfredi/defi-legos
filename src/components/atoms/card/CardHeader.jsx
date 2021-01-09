@@ -11,8 +11,9 @@ const StyledHeader = styled(Card.Header)`
   border-bottom: 0 !important;
 `
 
-const CardHeader = ({ children }) => {
-  return <StyledHeader>{children}</StyledHeader>
+const CardHeader = _props => {
+  const { children } = _props
+  return <StyledHeader {..._props}>{children}</StyledHeader>
 }
 
 export default CardHeader

@@ -6,7 +6,8 @@ import {
   BUILD_FAILED,
   BUILD_SUCEEDED,
   RESET_BUILD_ERROR,
-  SET_OPTION_ORDER
+  SET_OPTION_ORDER,
+  SET_OPTION_DISABLED
 } from '../../constants'
 
 const initialState = {
@@ -26,7 +27,8 @@ const buildStrategyReducer = (_state = initialState, _action) => {
     type === OPTION_DELETED ||
     type === OPTIONS_REORDERED ||
     type === SET_OPTION_INPUTS ||
-    type === SET_OPTION_ORDER
+    type === SET_OPTION_ORDER ||
+    type === SET_OPTION_DISABLED
   ) {
     return Object.assign({}, _state, {
       options: payload.options

@@ -38,11 +38,8 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
 
   const onDeletePositions = useCallback(
     _option => {
-      const optionToDelete = positions[_option.id]
-
       const newOptions = options
       delete newOptions[_option.id]
-      console.log(newOptions)
       setPositions({
         ...newOptions
       })
@@ -70,7 +67,7 @@ const SelectedOptions = ({ options, deleteOption, reorderOptions }) => {
           key={`draggable-${_option.id}`}
           handle=".handle"
           defaultPosition={{ x: 0, y: 0 }}
-          grid={[50, 50]}
+          grid={[25, 25]}
           position={positions[_option.id]}
           //disabledDraggable={disabledDraggable[_option.id]}
           scale={1}
