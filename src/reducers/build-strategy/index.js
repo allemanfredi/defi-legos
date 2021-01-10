@@ -19,7 +19,8 @@ const buildStrategyReducer = (_state = initialState, _action) => {
   const { type, payload } = _action
   if (type === NEW_STRATEGY_CREATED) {
     return Object.assign({}, _state, {
-      strategies: [..._state.strategies, payload.strategy]
+      strategies: [..._state.strategies, payload.strategy],
+      selectedStrategy: payload.strategy
     })
   }
   if (type === STRATEGY_SELECTED) {
