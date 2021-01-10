@@ -1,12 +1,10 @@
 import {
   NEW_STRATEGY_CREATED,
   STRATEGY_SELECTED,
-  STRATEGY_DELETED,
   OPTION_SELECTED,
   OPTION_DELETED,
   OPTIONS_REORDERED,
   SET_OPTION_INPUTS,
-  SET_OPTION_ORDER,
   SET_OPTION_DISABLED,
   BUILD_FAILED,
   BUILD_SUCEEDED,
@@ -16,6 +14,7 @@ import store from '../../store'
 import { v4 as uuidv4 } from 'uuid'
 import DSA from 'dsa-sdk'
 import Web3 from 'web3'
+import _ from 'lodash'
 
 const createStrategy = _option => {
   const strategies = store.getState().buildStrategy.strategies
@@ -40,14 +39,13 @@ const selectStrategy = _strategy => {
 }
 
 const selectOption = _option => {
-  const selectedStrategy = store.getState().buildStrategy.selectedStrategy
   return {
     type: OPTION_SELECTED,
     payload: {
       option: {
         ..._option,
         id: uuidv4(),
-        strategy: selectedStrategy
+        strategy: store.getState().buildStrategy.selectedStrategy
       }
     }
   }
@@ -78,16 +76,6 @@ const setOptionInputs = (_inputs, _optionToUpdate) => {
   }
 }
 
-const setOptionOrder = (_order, _optionToUpdate) => {
-  const options = store.getState().buildStrategy.options
-  return {
-    type: SET_OPTION_ORDER,
-    payload: {
-      options: options.map(_option => (_optionToUpdate.id === _option.id ? { ..._option, order: _order } : _option))
-    }
-  }
-}
-
 const setOptionDisabled = (_disabled, _optionToUpdate) => {
   const options = store.getState().buildStrategy.options
   return {
@@ -100,15 +88,21 @@ const setOptionDisabled = (_disabled, _optionToUpdate) => {
   }
 }
 
-const reorderOptions = (_startIndex, _endIndex) => {
-  const result = store.getState().buildStrategy.options
-  const [removed] = result.splice(_startIndex, 1)
-  const options = result.splice(_endIndex, 0, removed)
+const reorderOptions = (_startIndex, _endIndex, _strategyId, _index) => {
+  const options = store.getState().buildStrategy.options
+  const groupedOptions = _.chain([...options])
+    .groupBy('strategy.id')
+    .value()
+  const optionsForStrategyToUpdate = groupedOptions[_strategyId]
+
+  const [removed] = optionsForStrategyToUpdate.splice(_startIndex, 1)
+  optionsForStrategyToUpdate.splice(_endIndex, 0, removed)
+  groupedOptions[_strategyId] = optionsForStrategyToUpdate
 
   return {
     type: OPTIONS_REORDERED,
     payload: {
-      options
+      options: _.flatten(Object.values(groupedOptions))
     }
   }
 }
@@ -131,7 +125,6 @@ const buildAndExecute = () => {
 
       options
         .filter(({ disabled }) => !disabled)
-        .sort((_a, _b) => _a.order - _b.order)
         .forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
           if (!inputs) throw new Error('Invalid Input')
 
@@ -208,7 +201,6 @@ export {
   setOptionInputs,
   buildAndExecute,
   resetBuildError,
-  setOptionOrder,
   setOptionDisabled,
   createStrategy,
   selectStrategy

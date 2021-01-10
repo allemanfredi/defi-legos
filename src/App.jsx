@@ -31,7 +31,7 @@ const App = ({ chainId, buildError, resetBuildError }) => {
     if (buildError) {
       addToast(buildError, { appearance: 'error', onDismiss: resetBuildError })
     }
-  }, [error, buildError, addToast])
+  }, [error, buildError, addToast, resetBuildError])
 
   return (
     <BrowserRouter>

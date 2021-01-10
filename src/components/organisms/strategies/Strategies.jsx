@@ -33,7 +33,8 @@ const mapDispatchToProps = _dispatch => {
   return {
     selectStrategy: _strategy => _dispatch(selectStrategy(_strategy)),
     deleteOption: _id => _dispatch(deleteOption(_id)),
-    reorderOptions: (_startIndex, _endIndex) => _dispatch(deleteOption(reorderOptions(_startIndex, _endIndex)))
+    reorderOptions: (_startIndex, _endIndex, _strategyId, _index) =>
+      _dispatch(reorderOptions(_startIndex, _endIndex, _strategyId, _index))
   }
 }
 
@@ -51,12 +52,13 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
   )
 
   const onDragEnd = useCallback(
-    ({ source, destination }) => {
+    ({ source, destination }, _strategyId, _index) => {
       if (!source || !destination) return
-      reorderOptions(source.index, destination.index)
+      reorderOptions(source.index, destination.index, _strategyId, _index)
     },
     [reorderOptions]
   )
+
   return (
     <Fragment>
       <StrategiesContainer>
@@ -72,7 +74,7 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
       <StrategiesContainer>
         {new Array(strategies.length).fill('0').map((_, _index) => (
           <StrategiesContainerBody>
-            <DragDropContext onDragEnd={onDragEnd}>
+            <DragDropContext onDragEnd={_e => onDragEnd(_e, strategies[_index].id, _index)}>
               <Droppable droppableId={`droppable-${strategies[_index].id}`}>
                 {(provided, snapshot) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>

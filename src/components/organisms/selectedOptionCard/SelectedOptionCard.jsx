@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from 'react-bootstrap'
 import { Card } from '../../atoms/card'
 //import { ResizableBox } from 'react-resizable'
-import { setOptionInputs, setOptionOrder, setOptionDisabled } from '../../../actions/build-strategy/'
+import { setOptionInputs, setOptionDisabled } from '../../../actions/build-strategy/'
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -77,20 +77,12 @@ const mapStateToProps = _state => {
 const mapDispatchToProps = _dispatch => {
   return {
     setOptionInputs: (_inputs, _option) => _dispatch(setOptionInputs(_inputs, _option)),
-    setOptionOrder: (_order, _option) => _dispatch(setOptionOrder(_order, _option)),
     setOptionDisabled: (_disabled, _option) => _dispatch(setOptionDisabled(_disabled, _option))
   }
 }
 
-const SelectedOptionCard = ({
-  option,
-  onDelete,
-  /*onDisableDraggable,*/ setOptionInputs,
-  setOptionOrder,
-  setOptionDisabled
-}) => {
+const SelectedOptionCard = ({ option, onDelete, /*onDisableDraggable,*/ setOptionInputs, setOptionDisabled }) => {
   const [inputs, setInputs] = useState([])
-  const [order, setOrder] = useState('')
   const [disabled, setDisabled] = useState(false)
   const { method, name, args } = option
 
@@ -102,14 +94,6 @@ const SelectedOptionCard = ({
       setOptionInputs(newInputs, option)
     },
     [setOptionInputs, option, inputs]
-  )
-
-  const onChangeOrder = useCallback(
-    _order => {
-      setOrder(_order)
-      setOptionOrder(_order, option)
-    },
-    [setOptionOrder, option]
   )
 
   const onChangeDisable = useCallback(() => {
@@ -180,7 +164,6 @@ SelectedOptionCard.propTypes = {
   option: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
   setOptionInputs: PropTypes.func.isRequired,
-  setOptionOrder: PropTypes.func.isRequired,
   setOptionDisabled: PropTypes.func.isRequired
   //onDisableDraggable: PropTypes.func.isRequired
 }
