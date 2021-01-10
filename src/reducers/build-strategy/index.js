@@ -6,17 +6,13 @@ import {
   OPTION_DELETED,
   OPTIONS_REORDERED,
   SET_OPTION_INPUTS,
-  BUILD_FAILED,
-  BUILD_SUCEEDED,
-  RESET_BUILD_ERROR,
   SET_OPTION_DISABLED
 } from '../../constants'
 
 const initialState = {
   strategies: [],
   options: [],
-  selectedStrategy: null,
-  error: null
+  selectedStrategy: null
 }
 
 const buildStrategyReducer = (_state = initialState, _action) => {
@@ -50,21 +46,6 @@ const buildStrategyReducer = (_state = initialState, _action) => {
   ) {
     return Object.assign({}, _state, {
       options: payload.options
-    })
-  }
-  if (type === BUILD_FAILED) {
-    return Object.assign({}, _state, {
-      error: payload.error
-    })
-  }
-  if (type === RESET_BUILD_ERROR) {
-    return Object.assign({}, _state, {
-      error: null
-    })
-  }
-  if (type === BUILD_SUCEEDED) {
-    return Object.assign({}, _state, {
-      promiEvent: payload.promiEvent
     })
   }
   return _state

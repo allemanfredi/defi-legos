@@ -6,8 +6,6 @@ import {
   OPTIONS_REORDERED,
   SET_OPTION_INPUTS,
   SET_OPTION_DISABLED,
-  BUILD_FAILED,
-  BUILD_SUCEEDED,
   RESET_BUILD_ERROR
 } from '../../constants'
 import store from '../../store'
@@ -15,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import DSA from 'dsa-sdk'
 import Web3 from 'web3'
 import _ from 'lodash'
+import { toastr } from 'react-redux-toastr'
 
 const web3 = new Web3()
 
@@ -41,15 +40,22 @@ const selectStrategy = _strategy => {
 }
 
 const selectOption = _option => {
-  return {
-    type: OPTION_SELECTED,
-    payload: {
-      option: {
-        ..._option,
-        id: uuidv4(),
-        strategy: store.getState().buildStrategy.selectedStrategy
-      }
+  return async _dispatch => {
+    if (!store.getState().buildStrategy.selectedStrategy) {
+      toastr.error('Strategy not selected')
+      return
     }
+
+    _dispatch({
+      type: OPTION_SELECTED,
+      payload: {
+        option: {
+          ..._option,
+          id: uuidv4(),
+          strategy: store.getState().buildStrategy.selectedStrategy
+        }
+      }
+    })
   }
 }
 
@@ -112,8 +118,7 @@ const reorderOptions = (_startIndex, _endIndex, _strategyId, _index) => {
 const buildAndExecute = () => {
   return async _dispatch => {
     try {
-      const options = store.getState().buildStrategy.options
-      const selectedStrategy = store.getState().buildStrategy.selectedStrategy
+      const { options, selectedStrategy } = store.getState().buildStrategy
       const { provider, smartAccounts } = store.getState().wallet
 
       if (!selectedStrategy) throw new Error('Strategy not selected')
@@ -194,12 +199,7 @@ const buildAndExecute = () => {
         }
       }
     } catch (_err) {
-      _dispatch({
-        type: BUILD_FAILED,
-        payload: {
-          error: _err.message ? _err.message : _err
-        }
-      })
+      toastr.error(_err.message ? _err.message : _err)
     }
   }
 }

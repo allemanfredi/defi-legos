@@ -1,38 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { Route, Switch, Redirect, BrowserRouter } from 'react-router-dom'
-import { useToasts } from 'react-toast-notifications'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import HomeController from './components/pages/home'
-import { useChainId } from './hooks/use-chain-id'
-import { resetBuildError } from './actions/build-strategy'
+import Notifications from './components/atoms/notifications'
 
 const mapStateToProps = _state => {
-  return {
-    buildError: _state.buildStrategy.error,
-    chainId: _state.wallet.chainId
-  }
+  return {}
 }
 
 const mapDispatchToProps = _dispatch => {
-  return {
-    resetBuildError: () => _dispatch(resetBuildError())
-  }
+  return {}
 }
 
-const App = ({ chainId, buildError, resetBuildError }) => {
-  const { error } = useChainId(chainId)
-  const { addToast } = useToasts()
-
-  useEffect(() => {
-    if (error) {
-      addToast(error.message, { appearance: 'error' })
-    }
-    if (buildError) {
-      addToast(buildError, { appearance: 'error', onDismiss: resetBuildError })
-    }
-  }, [error, buildError, addToast, resetBuildError])
-
+const App = _props => {
   return (
     <BrowserRouter>
       <Switch>
@@ -40,7 +21,12 @@ const App = ({ chainId, buildError, resetBuildError }) => {
           exact
           path={'/'}
           render={() => {
-            return <HomeController />
+            return (
+              <Fragment>
+                <Notifications />
+                <HomeController />
+              </Fragment>
+            )
           }}
         />
         <Route render={() => <Redirect to="/" />} />
