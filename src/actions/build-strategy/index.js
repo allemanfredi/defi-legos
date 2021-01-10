@@ -16,6 +16,8 @@ import DSA from 'dsa-sdk'
 import Web3 from 'web3'
 import _ from 'lodash'
 
+const web3 = new Web3()
+
 const createStrategy = _option => {
   const strategies = store.getState().buildStrategy.strategies
   return {
@@ -111,19 +113,28 @@ const buildAndExecute = () => {
   return async _dispatch => {
     try {
       const options = store.getState().buildStrategy.options
-      const provider = store.getState().wallet.provider
-      const smartAccount = store.getState().wallet.smartAccounts
-      const web3 = new Web3(provider)
+      const selectedStrategy = store.getState().buildStrategy.selectedStrategy
+      const { provider, smartAccounts } = store.getState().wallet
+
+      if (!selectedStrategy) throw new Error('Strategy not selected')
+
+      const groupedOptions = _.chain([...options])
+        .groupBy('strategy.id')
+        .value()
+
+      const selectedOptions = groupedOptions[selectedStrategy.id]
+
+      web3.setProvider(provider)
       const dsa = new DSA(web3)
-      dsa.setInstance(smartAccount[0].id)
+      dsa.setInstance(smartAccounts[0].id)
 
       const withFlashloan = Boolean(
-        options.find(({ method, name }) => name === 'instapool_v2' && method === 'flashBorrowAndCast')
+        selectedOptions.find(({ method, name }) => name === 'instapool_v2' && method === 'flashBorrowAndCast')
       )
 
       const spells = dsa.Spell()
 
-      options
+      selectedOptions
         .filter(({ disabled }) => !disabled)
         .forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
           if (!inputs) throw new Error('Invalid Input')
@@ -183,7 +194,6 @@ const buildAndExecute = () => {
         }
       }
     } catch (_err) {
-      console.log(_err)
       _dispatch({
         type: BUILD_FAILED,
         payload: {
