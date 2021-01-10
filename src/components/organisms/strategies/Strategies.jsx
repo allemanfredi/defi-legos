@@ -10,16 +10,19 @@ const StrategiesContainer = styled.div`
   display: flex;
 `
 const StrategiesContainerHeader = styled.div`
-  width: 400px;
   border-bottom: 1px solid #ced4da;
   margin-bottom: 20px;
-  padding: 10px;
   cursor: pointer;
 `
 
-const StrategiesContainerBody = styled.div`
-  padding: 10px;
-  width: 400px;
+const StrategiesHeader = styled.div`
+  width: 410px;
+`
+
+const StrategiesContainerBody = styled.div``
+
+const StrategiesBody = styled.div`
+  width: 410px;
 `
 
 const mapStateToProps = _state => {
@@ -66,7 +69,7 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
           const { id, name } = _strategy
           return (
             <StrategiesContainerHeader onClick={() => selectStrategy(_strategy)} key={id}>
-              {name}
+              <StrategiesHeader>{name}</StrategiesHeader>
             </StrategiesContainerHeader>
           )
         })}
@@ -74,31 +77,33 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
       <StrategiesContainer>
         {new Array(strategies.length).fill('0').map((_, _index) => (
           <StrategiesContainerBody>
-            <DragDropContext onDragEnd={_e => onDragEnd(_e, strategies[_index].id, _index)}>
-              <Droppable droppableId={`droppable-${strategies[_index].id}`}>
-                {(provided, snapshot) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {options
-                      .filter(_option => _option.strategy.id === strategies[_index].id)
-                      .map((_option, index) => (
-                        <Draggable key={_option.id} draggableId={`draggable-${_option.id}`} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className={index > 0 ? 'mt-3' : null}
-                            >
-                              <SelectedOptionCard option={_option} onDelete={() => onDeleteOption(_option)} />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <StrategiesBody>
+              <DragDropContext onDragEnd={_e => onDragEnd(_e, strategies[_index].id, _index)}>
+                <Droppable droppableId={`droppable-${strategies[_index].id}`}>
+                  {(provided, snapshot) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {options
+                        .filter(_option => _option.strategy.id === strategies[_index].id)
+                        .map((_option, index) => (
+                          <Draggable key={_option.id} draggableId={`draggable-${_option.id}`} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={index > 0 ? 'mt-1' : null}
+                              >
+                                <SelectedOptionCard option={_option} onDelete={() => onDeleteOption(_option)} />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </StrategiesBody>
           </StrategiesContainerBody>
         ))}
       </StrategiesContainer>

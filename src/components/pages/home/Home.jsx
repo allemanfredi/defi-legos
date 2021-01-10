@@ -29,6 +29,11 @@ const NewStrategyButton = styled(Button)`
   width: 100%;
 `
 
+const StrategiesContainer = styled.div`
+  width: 100%;
+  overflow: auto;
+`
+
 const Home = ({
   buildAndExecute,
   isConnected,
@@ -42,11 +47,9 @@ const Home = ({
     <MainContainer>
       <Row>
         <Col xs={12} lg={8} xl={10}>
-          <Row className="mt-2">
-            <Col xs={12}>
-              <Strategies />
-            </Col>
-          </Row>
+          <StrategiesContainer>
+            <Strategies />
+          </StrategiesContainer>
         </Col>
         <Col xs={12} lg={4} xl={2}>
           <Row className="mt-2 font-weight-bold">
