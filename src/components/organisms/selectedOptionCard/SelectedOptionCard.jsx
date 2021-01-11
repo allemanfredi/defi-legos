@@ -2,7 +2,15 @@ import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from 'react-bootstrap'
+import {
+  Card as BootstrapCard,
+  Row,
+  Col,
+  InputGroup,
+  Form,
+  Badge,
+  Button
+} from 'react-bootstrap'
 import { Card } from '../../atoms/card'
 import { setOptionInputs, setOptionDisabled } from '../../../actions/build-strategy/'
 
@@ -96,12 +104,6 @@ const SelectedOptionCard = ({ option, onDelete, setOptionInputs, setOptionDisabl
 
   return (
     <StyledCard disabled={disabled}>
-      {/*<OrderNumberInput
-          type="number"
-          value={order}
-          autocomplete="false"
-          onChange={_e => onChangeOrder(_e.target.value)}
-        />*/}
       <BootstrapCard.Body>
         <Row>
           <Col xs={6} className="text-left">
@@ -127,16 +129,14 @@ const SelectedOptionCard = ({ option, onDelete, setOptionInputs, setOptionDisabl
         <Form className="mt-4">
           <Form.Row>
             <InputGroup>
-              {args.map((_arg, _index) => {
-                return (
-                  <StyledFormControl
-                    key={`${method}${_arg}`}
-                    placeholder={_arg}
-                    value={inputs[_index] ? inputs[_index] : ''}
-                    onChange={_e => onChangeInput(_e.target.value, _index)}
-                  />
-                )
-              })}
+              {args.map((_arg, _index) => (
+                <StyledFormControl
+                  key={`${method}${_arg}`}
+                  placeholder={_arg}
+                  value={inputs[_index] ? inputs[_index] : ''}
+                  onChange={_e => onChangeInput(_e.target.value, _index)}
+                />
+              ))}
             </InputGroup>
           </Form.Row>
         </Form>

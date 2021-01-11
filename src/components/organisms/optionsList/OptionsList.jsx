@@ -27,7 +27,7 @@ const ClickableIcon = styled(Icon)`
 `
 
 const StyledListGroupItem = styled(ListGroup.Item)`
-  border: 1px solid rgb(0 0 0 / 6%);
+  border: 1px solid rgb(0 0 0 / 10%); !important;
   cursor: pointer;
 `
 
@@ -38,7 +38,7 @@ const ContainerOptionList = styled.div`
 const mapStateToProps = _state => {
   return {}
 }
-//1px solid #ced4da
+
 const mapDispatchToProps = _dispatch => {
   return {
     selectOption: _option => _dispatch(selectOption(_option))

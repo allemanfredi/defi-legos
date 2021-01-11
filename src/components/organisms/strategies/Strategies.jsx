@@ -14,7 +14,9 @@ const StrategiesContainerHeader = styled.div`
   cursor: pointer;
   padding-left: 5px;
   border-bottom: 1px solid #ced4da;
-  background: ${({ isSelected }) => (isSelected ? '#dededef0' : '#FAFAFA')};
+  background: ${({ isSelected }) => (isSelected ? '#f0f1f5' : '#FAFAFA')};
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 `
 
 const StrategiesHeader = styled.div`
@@ -84,7 +86,7 @@ const Strategies = ({ strategies, selectedStrategy, options, deleteOption, reord
       </StrategiesContainer>
       <StrategiesContainer>
         {new Array(strategies.length).fill('0').map((_, _index) => (
-          <StrategiesContainerBody>
+          <StrategiesContainerBody key={_index}>
             <StrategiesBody>
               <DragDropContext onDragEnd={_e => onDragEnd(_e, strategies[_index].id, _index)}>
                 <Droppable droppableId={`droppable-${strategies[_index].id}`}>
