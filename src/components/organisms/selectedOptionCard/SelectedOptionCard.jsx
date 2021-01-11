@@ -19,7 +19,7 @@ const Method = styled.span`
 `
 
 const StyledCard = styled(Card)`
-  width: 400px;
+  width: 395px;
   cursor: move;
   cursor: grab;
   cursor: -moz-grab;

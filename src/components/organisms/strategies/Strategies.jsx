@@ -10,23 +10,32 @@ const StrategiesContainer = styled.div`
   display: flex;
 `
 const StrategiesContainerHeader = styled.div`
-  border-bottom: 1px solid #ced4da;
   margin-bottom: 20px;
   cursor: pointer;
+  padding-left: 5px;
+  border-bottom: 1px solid #ced4da;
+  background: ${({ isSelected }) => (isSelected ? '#dededef0' : '#fff')};
 `
 
 const StrategiesHeader = styled.div`
-  width: 410px;
+  width: 400px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 `
 
 const StrategiesContainerBody = styled.div``
 
 const StrategiesBody = styled.div`
-  width: 410px;
+  width: 405px;
+  padding: 5px;
 `
 
 const mapStateToProps = _state => {
   return {
+    selectedStrategy: _state.buildStrategy.selectedStrategy,
     strategies: _state.buildStrategy.strategies,
     options: _state.buildStrategy.options
   }
@@ -41,7 +50,7 @@ const mapDispatchToProps = _dispatch => {
   }
 }
 
-const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectStrategy }) => {
+const Strategies = ({ strategies, selectedStrategy, options, deleteOption, reorderOptions, selectStrategy }) => {
   const onDeleteOption = useCallback(
     _option => {
       deleteOption(_option)
@@ -63,7 +72,11 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
         {strategies.map((_strategy, _index) => {
           const { id, name } = _strategy
           return (
-            <StrategiesContainerHeader onClick={() => selectStrategy(_strategy)} key={id}>
+            <StrategiesContainerHeader
+              onClick={() => selectStrategy(_strategy)}
+              key={id}
+              isSelected={id === selectedStrategy.id}
+            >
               <StrategiesHeader>{name}</StrategiesHeader>
             </StrategiesContainerHeader>
           )
@@ -107,11 +120,12 @@ const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectS
 }
 
 Strategies.propTypes = {
+  selectedStrategy: PropTypes.object,
   strategies: PropTypes.array,
-  options: PropTypes.array,
+  options: PropTypes.array.isRequired,
   deleteOption: PropTypes.func.isRequired,
-  reorderOptions: PropTypes.func,
-  selectStrategy: PropTypes.func
+  reorderOptions: PropTypes.func.isRequired,
+  selectStrategy: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Strategies)
