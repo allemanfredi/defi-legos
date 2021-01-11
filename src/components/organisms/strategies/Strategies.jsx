@@ -14,7 +14,7 @@ const StrategiesContainerHeader = styled.div`
   cursor: pointer;
   padding-left: 5px;
   border-bottom: 1px solid #ced4da;
-  background: ${({ isSelected }) => (isSelected ? '#dededef0' : '#fff')};
+  background: ${({ isSelected }) => (isSelected ? '#dededef0' : '#FAFAFA')};
 `
 
 const StrategiesHeader = styled.div`

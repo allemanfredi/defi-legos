@@ -6,6 +6,8 @@
 
 Simple Dapp that allows to create single transactions composed of multiple interactions with the main DeFi  protocols.
 
+<img src="https://ipfs.io/ipfs/QmS9w9zFxLetZhHc3vf32trFuWRvWheW83zDtKxTe6J4Ws" height="250" width="500">
+
 &nbsp;
 
 ***

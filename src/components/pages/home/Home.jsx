@@ -9,7 +9,7 @@ import SmartAccountsCard from '../../organisms/smartAccountsCard'
 import Button from '../../atoms/button'
 
 const MainContainer = styled(Container)`
-  max-width: 1900px !important;
+  max-width: 2500px !important;
   padding-top: 20px;
 `
 
