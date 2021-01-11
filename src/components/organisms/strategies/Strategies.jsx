@@ -44,11 +44,6 @@ const mapDispatchToProps = _dispatch => {
 const Strategies = ({ strategies, options, deleteOption, reorderOptions, selectStrategy }) => {
   const onDeleteOption = useCallback(
     _option => {
-      /*const newOptions = options
-      delete newOptions[_option.id]
-      setPositions({
-        ...newOptions
-      })*/
       deleteOption(_option)
     },
     [deleteOption]

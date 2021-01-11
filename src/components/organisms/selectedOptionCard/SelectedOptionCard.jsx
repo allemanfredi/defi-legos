@@ -4,14 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from 'react-bootstrap'
 import { Card } from '../../atoms/card'
-//import { ResizableBox } from 'react-resizable'
 import { setOptionInputs, setOptionDisabled } from '../../../actions/build-strategy/'
-
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
 
 const Logo = styled.img`
   height: 30px;
@@ -81,7 +74,7 @@ const mapDispatchToProps = _dispatch => {
   }
 }
 
-const SelectedOptionCard = ({ option, onDelete, /*onDisableDraggable,*/ setOptionInputs, setOptionDisabled }) => {
+const SelectedOptionCard = ({ option, onDelete, setOptionInputs, setOptionDisabled }) => {
   const [inputs, setInputs] = useState([])
   const [disabled, setDisabled] = useState(false)
   const { method, name, args } = option
@@ -102,13 +95,6 @@ const SelectedOptionCard = ({ option, onDelete, /*onDisableDraggable,*/ setOptio
   }, [disabled])
 
   return (
-    /*<ResizableBox
-      width={400}
-      height={151}
-      onResizeStart={() => onDisableDraggable(true)}
-      onResize={() => onDisableDraggable(true)}
-      onResizeStop={() => onDisableDraggable(false)} // TODO
-    >*/
     <StyledCard disabled={disabled}>
       {/*<OrderNumberInput
           type="number"
@@ -156,7 +142,6 @@ const SelectedOptionCard = ({ option, onDelete, /*onDisableDraggable,*/ setOptio
         </Form>
       </BootstrapCard.Body>
     </StyledCard>
-    //</ResizableBox>
   )
 }
 
@@ -165,7 +150,6 @@ SelectedOptionCard.propTypes = {
   onDelete: PropTypes.func.isRequired,
   setOptionInputs: PropTypes.func.isRequired,
   setOptionDisabled: PropTypes.func.isRequired
-  //onDisableDraggable: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedOptionCard)
