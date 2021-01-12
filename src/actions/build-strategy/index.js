@@ -17,6 +17,8 @@ import { toastr } from 'react-redux-toastr'
 import BigNumber from 'bignumber.js'
 import Maker from '@makerdao/dai'
 import { McdPlugin } from '@makerdao/dai-plugin-mcd'
+import { handleUniswap } from './helpers/uniswap'
+import { searchByVaultId } from './helpers/maker'
 
 const web3 = new Web3()
 
@@ -174,72 +176,53 @@ const buildAndExecute = () => {
                           }
 
                           _resolve({
-                            value: token.decimals,
+                            value: token.address,
                             index: _iindex
                           })
                           break
                         }
                         case 'number': {
-                          // getId & setId (at the moment)
+                          // getId & setId (at the moment). Only withdraw on Uniswap has more than getId and setId on addiditionalArgsType
+
+                          if (decimalsSuggestor === 'multiplyBy10**18') {
+                            _resolve({
+                              value: BigNumber(fixedInputs[_iindex]).multipliedBy(10 ** 18),
+                              index: _iindex
+                            })
+                          }
+
+                          if (decimalsSuggestor === 'makerSearchByVaultId' && _iindex < args.length) {
+                            _resolve({
+                              value: await searchByVaultId({ fixedInputs, dsa, mgr, index: _iindex }),
+                              index: _iindex
+                            })
+                            break
+                          }
+
+                          if (name === 'uniswap') {
+                            _resolve({
+                              value: await handleUniswap({
+                                fixedInputs,
+                                method,
+                                dsa,
+                                index: _iindex,
+                                decimalsSuggestor
+                              }),
+                              index: _iindex
+                            })
+                            break
+                          }
+
                           if (_iindex >= args.length) {
                             _resolve({
                               value: '0',
-                              index: _iindex
-                            })
-                          }
-
-                          // NOTE: handler Maker
-                          if (decimalsSuggestor === 'makerSearchByVaultId' && _iindex < args.length) {
-                            const vaultId = fixedInputs[0] // NOTE: vault_id is always at 0 position
-                            const { ilk } = await mgr.getCdp(parseInt(vaultId))
-                            const symbol = ilk.toLowerCase().split('-')[0]
-                            const decimals = dsa.tokens.info[symbol.toLowerCase()].decimals
-
-                            _resolve({
-                              value: BigNumber(fixedInputs[_iindex])
-                                .multipliedBy(10 ** decimals)
-                                .toFixed(),
-                              index: _iindex
-                            })
-                            break
-                          }
-
-                          const whichToken = decimalsSuggestor[_iindex]
-
-                          // NOTE: handle Uniswap deposit
-                          if (name === 'uniswap' && method === 'deposit' && _iindex === 3) {
-                            // NOTE: [3] must become [2]/[3] => The unit amount of amtB/amtA with slippage.
-                            const tokenA = dsa.tokens.info[fixedInputs[0].toLowerCase()]
-                            const tokenB = dsa.tokens.info[fixedInputs[1].toLowerCase()]
-
-                            if (!tokenA || !tokenB) {
-                              _reject('Invalid Input')
-                              break
-                            }
-
-                            const amtA = fixedInputs[2]
-                            const amtB = fixedInputs[3]
-
-                            _resolve({
-                              value: (fixedInputs[3] = BigNumber(amtA ** tokenA.decimals)
-                                .dividedToIntegerBy(amtB ** tokenB.decimals)
-                                .toFixed()),
-                              index: _iindex
-                            })
-                            break
-                          }
-                          // NOTE: Uniswap deposit slippage
-                          if (name === 'uniswap' && method === 'deposit' && _iindex === 4) {
-                            _resolve({
-                              value: BigNumber(fixedInputs[4])
-                                .multipliedBy(10 ** 16)
-                                .toFixed(),
                               index: _iindex
                             })
                             break
                           }
 
                           // NOTE: handle generic mapping
+                          const whichToken = decimalsSuggestor[_iindex]
                           if (whichToken === undefined) {
                             _resolve(fixedInputs[_iindex])
                             break

@@ -236,9 +236,7 @@ const settings = {
         args: ['amount'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['number', 'number', 'number'],
-        decimalsSuggestor: {
-          0: 18 // dai has 18 decimals
-        }
+        decimalsSuggestor: 'multiplyBy10**18'
       }
     ],
     uniswap: [
@@ -272,21 +270,16 @@ const settings = {
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number'],
         decimalsSuggestor: {
-          2: 0,
-          3: '2/3'
+          2: 0
         }
       },
       {
         name: 'uniswap',
         method: 'withdraw',
-        args: ['tokenA', 'tokenB', 'uniAmt', 'unitAmtA', 'unitAmtB'],
-        additionalArgs: ['getId', 'setId'],
+        args: ['tokenA', 'tokenB', 'uniAmt'],
+        additionalArgs: ['unitAmtA', 'unitAmtB', 'getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number'],
-        decimalsSuggestor: {
-          2: 18, // uni has 18 decimals
-          3: 'amtA/uniAmt',
-          4: 'amtB/uniAmt'
-        }
+        decimalsSuggestor: {}
       }
     ]
   }
