@@ -2,15 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {
-  Card as BootstrapCard,
-  Row,
-  Col,
-  InputGroup,
-  Form,
-  Badge,
-  Button
-} from 'react-bootstrap'
+import { Card as BootstrapCard, Row, Col, InputGroup, Form, Badge, Button } from 'react-bootstrap'
 import { Card } from '../../atoms/card'
 import { setOptionInputs, setOptionDisabled } from '../../../actions/build-strategy/'
 

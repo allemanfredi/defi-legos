@@ -14,6 +14,9 @@ import DSA from 'dsa-sdk'
 import Web3 from 'web3'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
+import BigNumber from 'bignumber.js'
+import Maker from '@makerdao/dai'
+import { McdPlugin } from '@makerdao/dai-plugin-mcd'
 
 const web3 = new Web3()
 
@@ -121,6 +124,10 @@ const buildAndExecute = () => {
       const { options, selectedStrategy } = store.getState().buildStrategy
       const { provider, smartAccounts } = store.getState().wallet
 
+      web3.setProvider(provider)
+      const dsa = new DSA(web3)
+      dsa.setInstance(smartAccounts[0].id)
+
       if (!selectedStrategy) throw new Error('Strategy not selected')
 
       const groupedOptions = _.chain([...options])
@@ -129,44 +136,115 @@ const buildAndExecute = () => {
 
       const selectedOptions = groupedOptions[selectedStrategy.id]
 
-      web3.setProvider(provider)
-      const dsa = new DSA(web3)
-      dsa.setInstance(smartAccounts[0].id)
-
       const withFlashloan = Boolean(
         selectedOptions.find(({ method, name }) => name === 'instapool_v2' && method === 'flashBorrowAndCast')
       )
 
-      const spells = dsa.Spell()
+      // TODO: initialize only if it's needed
+      const maker = await Maker.create('mainnet', {
+        plugins: [[McdPlugin, { network: 'mainnet', prefetch: true }]],
+        provider: {
+          infuraProjectId: process.env.REACT_APP_INFURA_ID
+        }
+      })
+      const mgr = maker.service('mcd:cdpManager')
 
-      selectedOptions
+      const values = selectedOptions
         .filter(({ disabled }) => !disabled)
-        .forEach(({ method, name, inputs, args, additionalArgs, argsType }) => {
-          if (!inputs) throw new Error('Invalid Input')
+        .map(
+          ({ method, name, inputs, args, additionalArgs, argsType, decimalsSuggestor }, _oindex) =>
+            new Promise(async (_resolve, _reject) => {
+              if (!inputs) throw new Error('Invalid Input')
 
-          const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
-          for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
+              const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
+              for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
 
-          const realArgs = argsType.map((_type, _index) => {
-            switch (_type) {
-              case 'address': {
-                const address = dsa.tokens.info[fixedInputs[_index].toLowerCase()].address
-                if (!address) {
-                  throw new Error('Invalid token')
-                }
-                return address
+              const realArgs = argsType.map(
+                (_type, _iindex) =>
+                  new Promise(async (_resolve, _reject) => {
+                    try {
+                      switch (_type) {
+                        case 'address': {
+                          const address = dsa.tokens.info[fixedInputs[_iindex].toLowerCase()].address
+                          if (!address) {
+                            throw new Error(`${fixedInputs[_iindex].toLowerCase()} is not valid or not supported token`)
+                          }
+                          _resolve({
+                            value: address,
+                            index: _iindex
+                          })
+                          break
+                        }
+                        case 'number': {
+                          // getId & setId (at the moment)
+                          if (_iindex >= args.length) {
+                            _resolve({
+                              value: '0',
+                              index: _iindex
+                            })
+                          }
+
+                          if (decimalsSuggestor === 'makerSearchByVaultId' && _iindex < args.length) {
+                            const vaultId = fixedInputs[0] // NOTE: vault_id is always at 0 position
+                            const { ilk } = await mgr.getCdp(parseInt(vaultId))
+                            const symbol = ilk.toLowerCase().split('-')[0]
+                            const decimals = dsa.tokens.info[symbol.toLowerCase()].decimals
+
+                            _resolve({
+                              value: BigNumber(fixedInputs[_iindex])
+                                .multipliedBy(10 ** decimals)
+                                .toFixed(),
+                              index: _iindex
+                            })
+                            break
+                          }
+
+                          const whichToken = decimalsSuggestor[_iindex]
+                          if (whichToken === undefined) {
+                            _resolve(fixedInputs[_iindex])
+                            break
+                          }
+                          const decimals = dsa.tokens.info[fixedInputs[whichToken].toLowerCase()].decimals
+                          _resolve({
+                            value: BigNumber(fixedInputs[_iindex])
+                              .multipliedBy(10 ** decimals)
+                              .toFixed(),
+                            index: _iindex
+                          })
+                          break
+                        }
+                        default:
+                          _resolve({
+                            value: fixedInputs[_iindex],
+                            index: _iindex
+                          })
+                          break
+                      }
+                    } catch (_err) {
+                      _reject(_err)
+                    }
+                  })
+              )
+
+              try {
+                _resolve({
+                  value: {
+                    connector: name,
+                    method,
+                    args: (await Promise.all(realArgs)).sort((_a, _b) => _a.index - _b.index).map(({ value }) => value)
+                  },
+                  index: _oindex
+                })
+              } catch (_err) {
+                _reject(_err)
               }
-              default:
-                return fixedInputs[_index]
-            }
-          })
+            })
+        )
 
-          spells.add({
-            connector: name,
-            method,
-            args: realArgs
-          })
-        })
+      const spellValues = (await Promise.all(values)).sort((_a, _b) => _a.index - _b.index).map(({ value }) => value)
+      const spells = dsa.Spell()
+      spellValues.forEach(_spell => spells.add(_spell))
+      console.log(spellValues)
 
       if (withFlashloan) {
         const flashloanSpell = dsa.Spell()
@@ -182,27 +260,36 @@ const buildAndExecute = () => {
         const calldata = dsa.instapool_v2.encodeFlashCastData(spellsToEncode)
         flashloanSpell.data[0].args[flashloanSpell.data[0].args.length - 1] = calldata
 
-        await dsa.cast(flashloanSpell)
-
-        /*_dispatch({
-          type: BUILD_SUCEEDED,
-          payload: {
-            promiEvent: dsa.cast(flashloanSpell)
-          }
-        })*/
+        await _monitorTransaction(dsa.cast(flashloanSpell))
+        // TODO What next?
       } else {
-        return {
-          type: 'TODO',
-          payload: {
-            TODO: 'TODO'
-          }
-        }
+        await _monitorTransaction(dsa.cast(spells))
+        // TODO What next?
       }
     } catch (_err) {
       toastr.error(_err.message ? _err.message : _err)
     }
   }
 }
+
+const _monitorTransaction = _promiEvent =>
+  new Promise(_resolve => {
+    _promiEvent
+      .once('transactionHash', _hash => {
+        toastr.success(' View on Etherscan!', {
+          timeOut: 8000,
+          onToastrClick: () => window.open(`https://etherscan.io/tx/${_hash}`, '_blank')
+        })
+      })
+      .once('receipt', () => {
+        toastr.success('Transaction confirmed!')
+        _resolve()
+      })
+      .once('error', _err => {
+        toastr.error(_err.message)
+        _resolve()
+      })
+  })
 
 export {
   selectOption,

@@ -25,6 +25,7 @@ Then create an __.env__ file with the following parameters:
 ```
 REACT_APP_INFURA_ENDPOINT=
 REACT_APP_INFURA_ID=
+SKIP_PREFLIGHT_CHECK=
 ```
 
 and then:
