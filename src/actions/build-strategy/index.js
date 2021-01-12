@@ -123,6 +123,7 @@ const buildAndExecute = () => {
     try {
       const { options, selectedStrategy } = store.getState().buildStrategy
       const { provider, smartAccounts } = store.getState().wallet
+      let maker, mgr
 
       web3.setProvider(provider)
       const dsa = new DSA(web3)
@@ -140,14 +141,16 @@ const buildAndExecute = () => {
         selectedOptions.find(({ method, name }) => name === 'instapool_v2' && method === 'flashBorrowAndCast')
       )
 
-      // TODO: initialize only if it's needed
-      const maker = await Maker.create('mainnet', {
-        plugins: [[McdPlugin, { network: 'mainnet', prefetch: true }]],
-        provider: {
-          infuraProjectId: process.env.REACT_APP_INFURA_ID
-        }
-      })
-      const mgr = maker.service('mcd:cdpManager')
+      const withMakerStuff = Boolean(selectedOptions.find(({ name }) => name === 'maker'))
+      if (withMakerStuff) {
+        maker = await Maker.create('mainnet', {
+          plugins: [[McdPlugin, { network: 'mainnet', prefetch: true }]],
+          provider: {
+            infuraProjectId: process.env.REACT_APP_INFURA_ID
+          }
+        })
+        mgr = maker.service('mcd:cdpManager')
+      }
 
       const values = selectedOptions
         .filter(({ disabled }) => !disabled)
@@ -165,12 +168,13 @@ const buildAndExecute = () => {
                     try {
                       switch (_type) {
                         case 'address': {
-                          const address = dsa.tokens.info[fixedInputs[_iindex].toLowerCase()].address
-                          if (!address) {
-                            throw new Error(`${fixedInputs[_iindex].toLowerCase()} is not valid or not supported token`)
+                          const token = dsa.tokens.info[fixedInputs[_iindex].toLowerCase()]
+                          if (!token) {
+                            _reject('Invalid or not supported token')
                           }
+
                           _resolve({
-                            value: address,
+                            value: token.decimals,
                             index: _iindex
                           })
                           break
@@ -184,6 +188,7 @@ const buildAndExecute = () => {
                             })
                           }
 
+                          // NOTE: handler Maker
                           if (decimalsSuggestor === 'makerSearchByVaultId' && _iindex < args.length) {
                             const vaultId = fixedInputs[0] // NOTE: vault_id is always at 0 position
                             const { ilk } = await mgr.getCdp(parseInt(vaultId))
@@ -200,6 +205,41 @@ const buildAndExecute = () => {
                           }
 
                           const whichToken = decimalsSuggestor[_iindex]
+
+                          // NOTE: handle Uniswap deposit
+                          if (name === 'uniswap' && method === 'deposit' && _iindex === 3) {
+                            // NOTE: [3] must become [2]/[3] => The unit amount of amtB/amtA with slippage.
+                            const tokenA = dsa.tokens.info[fixedInputs[0].toLowerCase()]
+                            const tokenB = dsa.tokens.info[fixedInputs[1].toLowerCase()]
+
+                            if (!tokenA || !tokenB) {
+                              _reject('Invalid Input')
+                              break
+                            }
+
+                            const amtA = fixedInputs[2]
+                            const amtB = fixedInputs[3]
+
+                            _resolve({
+                              value: (fixedInputs[3] = BigNumber(amtA ** tokenA.decimals)
+                                .dividedToIntegerBy(amtB ** tokenB.decimals)
+                                .toFixed()),
+                              index: _iindex
+                            })
+                            break
+                          }
+                          // NOTE: Uniswap deposit slippage
+                          if (name === 'uniswap' && method === 'deposit' && _iindex === 4) {
+                            _resolve({
+                              value: BigNumber(fixedInputs[4])
+                                .multipliedBy(10 ** 16)
+                                .toFixed(),
+                              index: _iindex
+                            })
+                            break
+                          }
+
+                          // NOTE: handle generic mapping
                           if (whichToken === undefined) {
                             _resolve(fixedInputs[_iindex])
                             break

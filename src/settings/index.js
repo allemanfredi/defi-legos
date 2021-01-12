@@ -237,7 +237,7 @@ const settings = {
         additionalArgs: ['getId', 'setId'],
         argsType: ['number', 'number', 'number'],
         decimalsSuggestor: {
-          0: 18n // dai has 18 decimals
+          0: 18 // dai has 18 decimals
         }
       }
     ],
@@ -267,12 +267,13 @@ const settings = {
       {
         name: 'uniswap',
         method: 'deposit',
-        args: ['tokenA', 'tokenB', 'amtA', 'unitAmt', 'slippage'],
+        //args: ['tokenA', 'tokenB', 'amtA', 'unitAmt', 'slippage'],
+        args: ['tokenA', 'tokenB', 'amtA', 'amtB', 'slippage'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number'],
         decimalsSuggestor: {
           2: 0,
-          3: 'amtB/amtA'
+          3: '2/3'
         }
       },
       {
@@ -283,8 +284,8 @@ const settings = {
         argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number'],
         decimalsSuggestor: {
           2: 18, // uni has 18 decimals
-          3: 0,
-          4: 1
+          3: 'amtA/uniAmt',
+          4: 'amtB/uniAmt'
         }
       }
     ]
