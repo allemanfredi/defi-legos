@@ -92,7 +92,7 @@ const SelectedOptionCard = ({ option, onDelete, setOptionInputs, setOptionDisabl
   const onChangeDisable = useCallback(() => {
     setDisabled(!disabled)
     setOptionDisabled(!disabled, option)
-  }, [disabled])
+  }, [disabled, option, setOptionDisabled])
 
   return (
     <StyledCard disabled={disabled}>

@@ -212,7 +212,7 @@ const settings = {
         args: ['vaultId', 'nextOwner'],
         additionalArgs: [],
         argsType: ['number', 'address'],
-        decimalsSuggestor: null
+        decimalsSuggestor: {}
       },
       {
         name: 'maker',
@@ -236,7 +236,9 @@ const settings = {
         args: ['amount'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['number', 'number', 'number'],
-        decimalsSuggestor: 'multiplyBy10**18'
+        decimalsSuggestor: {
+          0: 'multiplyBy10**18'
+        }
       }
     ],
     uniswap: [

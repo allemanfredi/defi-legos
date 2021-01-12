@@ -183,16 +183,18 @@ const buildAndExecute = () => {
                           break
                         }
                         case 'number': {
-                          // getId & setId (at the moment). Only withdraw on Uniswap has more than getId and setId on addiditionalArgsType
-
-                          if (decimalsSuggestor === 'multiplyBy10**18') {
+                          if (decimalsSuggestor[_iindex] === 'multiplyBy10**18') {
+                            console.log('coao')
                             _resolve({
-                              value: BigNumber(fixedInputs[_iindex]).multipliedBy(10 ** 18),
+                              value: BigNumber(fixedInputs[_iindex])
+                                .multipliedBy(10 ** 18)
+                                .toFixed(),
                               index: _iindex
                             })
+                            break
                           }
 
-                          if (method === 'flashBorrowAndCast' && _iindex == 2) {
+                          if (method === 'flashBorrowAndCast' && _iindex === 2) {
                             const protocol = protocolFlashLoanMap[fixedInputs[_iindex]]
                             if (!protocol) {
                               _reject('Invalid protocol')
@@ -226,6 +228,7 @@ const buildAndExecute = () => {
                             break
                           }
 
+                          // NOTE: at the moment getId and setId are set to 0
                           if (_iindex >= args.length) {
                             _resolve({
                               value: '0',
@@ -303,6 +306,7 @@ const buildAndExecute = () => {
         // TODO What next?
       }
     } catch (_err) {
+      console.log(_err)
       toastr.error(_err.message ? _err.message : _err)
     }
   }
