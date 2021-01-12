@@ -19,6 +19,7 @@ import Maker from '@makerdao/dai'
 import { McdPlugin } from '@makerdao/dai-plugin-mcd'
 import { handleUniswap } from './helpers/uniswap'
 import { searchByVaultId } from './helpers/maker'
+import { protocolFlashLoanMap } from './helpers/instapool-v2'
 
 const web3 = new Web3()
 
@@ -189,6 +190,18 @@ const buildAndExecute = () => {
                               value: BigNumber(fixedInputs[_iindex]).multipliedBy(10 ** 18),
                               index: _iindex
                             })
+                          }
+
+                          if (method === 'flashBorrowAndCast' && _iindex == 2) {
+                            const protocol = protocolFlashLoanMap[fixedInputs[_iindex]]
+                            if (!protocol) {
+                              _reject('Invalid protocol')
+                            }
+                            _resolve({
+                              value: protocol,
+                              index: _iindex
+                            })
+                            break
                           }
 
                           if (decimalsSuggestor === 'makerSearchByVaultId' && _iindex < args.length) {
