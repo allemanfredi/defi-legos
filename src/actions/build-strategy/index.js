@@ -126,7 +126,7 @@ const buildAndExecute = () => {
     try {
       const { options, selectedStrategy } = store.getState().buildStrategy
       const { provider, smartAccounts } = store.getState().wallet
-      let maker, mgr
+      let maker, mgr, hash
 
       web3.setProvider(provider)
       const dsa = new DSA(web3)
@@ -299,12 +299,17 @@ const buildAndExecute = () => {
         const calldata = dsa.instapool_v2.encodeFlashCastData(spellsToEncode)
         flashloanSpell.data[0].args[flashloanSpell.data[0].args.length - 1] = calldata
 
-        await _monitorTransaction(dsa.cast(flashloanSpell))
-        // TODO What next?
+        hash = await dsa.cast(flashloanSpell)
       } else {
-        await _monitorTransaction(dsa.cast(spells))
-        // TODO What next?
+        hash = await dsa.cast(spells)
       }
+
+      toastr.success(' View on Etherscan!', {
+        timeOut: 8000,
+        onToastrClick: () => window.open(`https://etherscan.io/tx/${hash}`, '_blank')
+      })
+      await _waitForTransactionConfirmation(hash, web3)
+      toastr.success('Transaction confirmed!')
     } catch (_err) {
       console.log(_err)
       toastr.error(_err.message ? _err.message : _err)
@@ -312,24 +317,20 @@ const buildAndExecute = () => {
   }
 }
 
-const _monitorTransaction = _promiEvent =>
-  new Promise(_resolve => {
-    _promiEvent
-      .once('transactionHash', _hash => {
-        toastr.success(' View on Etherscan!', {
-          timeOut: 8000,
-          onToastrClick: () => window.open(`https://etherscan.io/tx/${_hash}`, '_blank')
-        })
-      })
-      .once('receipt', () => {
-        toastr.success('Transaction confirmed!')
-        _resolve()
-      })
-      .once('error', _err => {
-        toastr.error(_err.message)
-        _resolve()
-      })
-  })
+const _waitForTransactionConfirmation = async (_hash, _web3) => {
+  try {
+    const sleep = () => new Promise(_resolve => setTimeout(() => _resolve(), 1000))
+    while (true) {
+      await sleep()
+      const tx = await _web3.eth.getTransactionReceipt(_hash)
+      if (!tx) continue
+      const { status } = tx
+      if (status) return
+    }
+  } catch (_err) {
+    console.error(_err.message)
+  }
+}
 
 export {
   selectOption,
