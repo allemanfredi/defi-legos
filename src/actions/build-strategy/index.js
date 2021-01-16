@@ -184,7 +184,6 @@ const buildAndExecute = () => {
                         }
                         case 'number': {
                           if (decimalsSuggestor[_iindex] === 'multiplyBy10**18') {
-                            console.log('coao')
                             _resolve({
                               value: BigNumber(fixedInputs[_iindex])
                                 .multipliedBy(10 ** 18)
@@ -283,7 +282,6 @@ const buildAndExecute = () => {
       const spellValues = (await Promise.all(values)).sort((_a, _b) => _a.index - _b.index).map(({ value }) => value)
       const spells = dsa.Spell()
       spellValues.forEach(_spell => spells.add(_spell))
-      console.log(spellValues)
 
       if (withFlashloan) {
         const flashloanSpell = dsa.Spell()
