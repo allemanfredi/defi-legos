@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
@@ -7,6 +7,8 @@ import OptionsList from '../../organisms/optionsList'
 import { Row, Col } from 'react-bootstrap'
 import SmartAccountsCard from '../../organisms/smartAccountsCard'
 import Button from '../../atoms/button'
+import Banner from '../../atoms/banner'
+import Icon from '../../atoms/icon'
 
 const MainContainer = styled(Container)`
   max-width: 2500px !important;
@@ -34,6 +36,10 @@ const StrategiesContainer = styled.div`
   overflow: auto;
 `
 
+const BannerText = styled.span`
+  margin-left: 5px;
+`
+
 const Home = ({
   buildAndExecute,
   isConnected,
@@ -43,51 +49,64 @@ const Home = ({
   smartAccount,
   onNewStrategy
 }) => {
+  const [showBanner, setShowBanner] = useState(true)
+  const onCloseBanner = useCallback(() => {
+    setShowBanner(!showBanner)
+  }, [showBanner])
+
   return (
-    <MainContainer>
-      <Row>
-        <Col xs={12} lg={8} xl={10}>
-          <StrategiesContainer>
-            <Strategies />
-          </StrategiesContainer>
-        </Col>
-        <Col xs={12} lg={4} xl={2}>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={12}>
-              {isConnected ? (
-                <Fragment>
-                  <DisconnectButton onClick={onDisconnectWallet} text={`Disconnect (${address})`} />
-                </Fragment>
-              ) : (
-                <React.Fragment>
-                  <ConnectButton onClick={onConnectWallet} text={'Connect'} />
-                </React.Fragment>
-              )}
-            </Col>
-          </Row>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={12}>
-              <ExecuteButton onClick={buildAndExecute} text={'Execute'} disabled={!isConnected || !smartAccount} />
-            </Col>
-          </Row>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={12}>
-              <NewStrategyButton onClick={onNewStrategy} text={'New strategy'} />
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col xs={12}>
-              <SmartAccountsCard />
-            </Col>
-          </Row>
-          <Row className="mt-2 font-weight-bold">
-            <Col xs={12}>
-              <OptionsList />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </MainContainer>
+    <Fragment>
+      <MainContainer>
+        <Row>
+          <Col xs={12} lg={8} xl={10}>
+            <StrategiesContainer>
+              <Strategies />
+            </StrategiesContainer>
+          </Col>
+          <Col xs={12} lg={4} xl={2}>
+            <Row className="mt-2 font-weight-bold">
+              <Col xs={12}>
+                {isConnected ? (
+                  <Fragment>
+                    <DisconnectButton onClick={onDisconnectWallet} text={`Disconnect (${address})`} />
+                  </Fragment>
+                ) : (
+                  <React.Fragment>
+                    <ConnectButton onClick={onConnectWallet} text={'Connect'} />
+                  </React.Fragment>
+                )}
+              </Col>
+            </Row>
+            <Row className="mt-2 font-weight-bold">
+              <Col xs={12}>
+                <ExecuteButton onClick={buildAndExecute} text={'Execute'} disabled={!isConnected || !smartAccount} />
+              </Col>
+            </Row>
+            <Row className="mt-2 font-weight-bold">
+              <Col xs={12}>
+                <NewStrategyButton onClick={onNewStrategy} text={'New strategy'} />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col xs={12}>
+                <SmartAccountsCard />
+              </Col>
+            </Row>
+            <Row className="mt-2 font-weight-bold">
+              <Col xs={12}>
+                <OptionsList />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </MainContainer>
+      <Banner visible={showBanner} onClose={onCloseBanner}>
+        <Fragment>
+          <Icon icon="caution" />
+          <BannerText>The project is still in the beta phase. Use it with caution!</BannerText>
+        </Fragment>
+      </Banner>
+    </Fragment>
   )
 }
 

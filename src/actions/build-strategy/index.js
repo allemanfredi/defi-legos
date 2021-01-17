@@ -130,7 +130,7 @@ const buildAndExecute = () => {
 
       web3.setProvider(provider)
       const dsa = new DSA(web3)
-      dsa.setInstance(smartAccounts[0].id)
+      await dsa.setInstance(smartAccounts[0].id)
 
       if (!selectedStrategy) throw new Error('Strategy not selected')
 
@@ -160,7 +160,7 @@ const buildAndExecute = () => {
         .map(
           ({ method, name, inputs, args, additionalArgs, argsType, decimalsSuggestor }, _oindex) =>
             new Promise(async (_resolve, _reject) => {
-              if (!inputs) throw new Error('Invalid Input')
+              if (!inputs) return
 
               const fixedInputs = Array(args.length + additionalArgs.length).fill('0')
               for (let i = 0; i < inputs.length; i++) fixedInputs[i] = inputs[i] ? inputs[i] : '0'
