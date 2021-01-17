@@ -41,7 +41,6 @@ const Banner = _props => {
 }
 
 Banner.propTypes = {
-  text: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 }
