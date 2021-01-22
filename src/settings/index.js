@@ -3,7 +3,7 @@ const settings = {
     uniswap: 'Uniswap',
     aave: 'AAVE',
     instapool_v2: 'Instapool V2',
-    'curve-y': 'Curve Finance',
+    'curve': 'Curve Finance',
     maker: 'MakerDAO',
     compound: 'Compound',
     '1inch': '1inch'
@@ -103,9 +103,9 @@ const settings = {
         }
       }
     ],
-    'curve-y': [
+    'curve': [
       {
-        name: 'curve-y',
+        name: 'curve',
         method: 'sell',
         args: ['buyToken', 'sellToken', 'sellAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
@@ -116,7 +116,7 @@ const settings = {
         }
       },
       {
-        name: 'curve-y',
+        name: 'curve',
         method: 'deposit',
         args: ['token', 'amount', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
@@ -127,7 +127,7 @@ const settings = {
         }
       },
       {
-        name: 'curve-y',
+        name: 'curve',
         method: 'withdraw',
         args: ['token', 'amount', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
