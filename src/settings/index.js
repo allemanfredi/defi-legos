@@ -242,19 +242,6 @@ const settings = {
         }
       }
     ],
-    '1inch': [
-      {
-        name: '1inch',
-        method: 'sell',
-        args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
-        additionalArgs: ['getId', 'setId'],
-        argsType: ['address', 'address', 'number', 'number', 'number', 'number'],
-        decimalsSuggestor: {
-          2: 0,
-          3: 1
-        }
-      },
-    ],
     uniswap: [
       {
         name: 'uniswap',
@@ -297,7 +284,20 @@ const settings = {
         argsType: ['address', 'address', 'number', 'number', 'number', 'number', 'number'],
         decimalsSuggestor: {}
       }
-    ]
+    ],
+    '1inch': [
+      {
+        name: '1inch',
+        method: 'sell',
+        args: ['tokenBuy', 'tokenSell', 'sellAmt', 'unitAmt'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number'],
+        decimalsSuggestor: {
+          2: 0,
+          3: 0
+        }
+      },
+    ],
   }
 }
 
