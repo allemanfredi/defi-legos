@@ -5,7 +5,8 @@ const settings = {
     instapool_v2: 'Instapool V2',
     'curve-y': 'Curve Finance',
     maker: 'MakerDAO',
-    compound: 'Compound'
+    compound: 'Compound',
+    '1inch': '1inch'
   },
   options: {
     aave: [
@@ -106,7 +107,7 @@ const settings = {
       {
         name: 'curve-y',
         method: 'sell',
-        args: ['buyAddr', 'sellAddr', 'sellAmt', 'unitAmt'],
+        args: ['buyToken', 'sellToken', 'sellAmt', 'unitAmt'],
         additionalArgs: ['getId', 'setId'],
         argsType: ['address', 'address', 'number', 'number', 'number', 'number'],
         decimalsSuggestor: {
@@ -240,6 +241,19 @@ const settings = {
           0: 'multiplyBy10**18'
         }
       }
+    ],
+    '1inch': [
+      {
+        name: '1inch',
+        method: 'sell',
+        args: ['tokenBuy', 'tokenSell', 'buyAmt', 'unitAmt'],
+        additionalArgs: ['getId', 'setId'],
+        argsType: ['address', 'address', 'number', 'number', 'number', 'number'],
+        decimalsSuggestor: {
+          2: 0,
+          3: 1
+        }
+      },
     ],
     uniswap: [
       {
