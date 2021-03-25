@@ -126,9 +126,10 @@ const buildAndExecute = () => {
     try {
       const { options, selectedStrategy } = store.getState().buildStrategy
       const { provider, smartAccounts } = store.getState().wallet
+      const { isEnabled, forkId } = store.getState().simulator
       let maker, mgr, hash
 
-      web3.setProvider(provider)
+      web3.setProvider(isEnabled ? `${process.env.REACT_APP_SIMULEREUM_ENDPOINT}/${forkId}` : provider)
       const dsa = new DSA(web3)
       await dsa.setInstance(smartAccounts[0].id)
 

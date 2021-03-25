@@ -3,7 +3,7 @@ const settings = {
     uniswap: 'Uniswap',
     aave: 'AAVE',
     instapool_v2: 'Instapool V2',
-    'curve': 'Curve Finance',
+    curve: 'Curve Finance',
     maker: 'MakerDAO',
     compound: 'Compound',
     '1inch': '1inch'
@@ -103,7 +103,7 @@ const settings = {
         }
       }
     ],
-    'curve': [
+    curve: [
       {
         name: 'curve',
         method: 'sell',
@@ -296,8 +296,8 @@ const settings = {
           2: 0,
           3: 0
         }
-      },
-    ],
+      }
+    ]
   }
 }
 
