@@ -137,10 +137,10 @@ const Home = ({
           </Col>
           <Col xs={12} lg={4} xl={2}>
             <Row className="font-weight-bold">
-              <Col xs={6} className="my-auto">
+              <Col xs={8} className="my-auto">
                 <SimulationModeLabel>SIMULATION MODE:</SimulationModeLabel>
               </Col>
-              <Col xs={6} className="text-right">
+              <Col xs={4} className="text-right">
                 <Switch
                   disabled={!isConnected}
                   onChange={handleSimulatorChange}

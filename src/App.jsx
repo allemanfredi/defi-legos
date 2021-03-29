@@ -4,16 +4,19 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import HomeController from './components/pages/home'
 import Notifications from './components/atoms/notifications'
+import Loader from './components/organisms/loader'
 
 const mapStateToProps = _state => {
-  return {}
+  return {
+    loading: _state.general.loading
+  }
 }
 
 const mapDispatchToProps = _dispatch => {
   return {}
 }
 
-const App = _props => {
+const App = ({ loading }) => {
   return (
     <BrowserRouter>
       <Switch>
@@ -23,6 +26,7 @@ const App = _props => {
           render={() => {
             return (
               <Fragment>
+                <Loader loading={loading} />
                 <Notifications />
                 <HomeController />
               </Fragment>
