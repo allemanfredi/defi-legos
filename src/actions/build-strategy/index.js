@@ -20,6 +20,7 @@ import { McdPlugin } from '@makerdao/dai-plugin-mcd'
 import { handleUniswap } from './helpers/uniswap'
 import { searchByVaultId } from './helpers/maker'
 import { protocolFlashLoanMap } from './helpers/instapool-v2'
+import { setLoading } from '../general'
 
 const web3 = new Web3()
 
@@ -125,11 +126,12 @@ const buildAndExecute = () => {
   return async _dispatch => {
     try {
       const { options, selectedStrategy } = store.getState().buildStrategy
-      const { provider, smartAccounts } = store.getState().wallet
-      const { isEnabled, forkId } = store.getState().simulator
+      const { provider, smartAccounts, account } = store.getState().wallet
+      const { isEnabled: isSimulating, forkId } = store.getState().simulator
       let maker, mgr, hash
 
-      web3.setProvider(isEnabled ? `${process.env.REACT_APP_SIMULEREUM_ENDPOINT}/${forkId}` : provider)
+
+      web3.setProvider(isSimulating ? `${process.env.REACT_APP_SIMULEREUM_ENDPOINT}/${forkId}` : provider)
       const dsa = new DSA(web3)
       await dsa.setInstance(smartAccounts[0].id)
 
@@ -284,6 +286,15 @@ const buildAndExecute = () => {
       const spells = dsa.Spell()
       spellValues.forEach(_spell => spells.add(_spell))
 
+      if (isSimulating) {
+        _dispatch(
+          setLoading({
+            text: 'Simulating ... ',
+            isLoading: true
+          })
+        )
+      }
+
       if (withFlashloan) {
         const flashloanSpell = dsa.Spell()
         flashloanSpell.add(spells.data[0])
@@ -298,18 +309,32 @@ const buildAndExecute = () => {
         const calldata = dsa.instapool_v2.encodeFlashCastData(spellsToEncode)
         flashloanSpell.data[0].args[flashloanSpell.data[0].args.length - 1] = calldata
 
-        hash = await dsa.cast(flashloanSpell)
+        hash = await dsa.cast({ ...flashloanSpell, from: account})
       } else {
-        hash = await dsa.cast(spells)
+        hash = await dsa.cast({ ...spells, from: account })
       }
 
-      toastr.success(' View on Etherscan!', {
-        timeOut: 8000,
-        onToastrClick: () => window.open(`https://etherscan.io/tx/${hash}`, '_blank')
-      })
+      if (isSimulating) {
+        toastr.success(' View on Etherscan!', {
+          timeOut: 8000,
+          onToastrClick: () => window.open(`https://etherscan.io/tx/${hash}`, '_blank')
+        })
+      }
+
+      _dispatch(
+        setLoading({
+          isLoading: false
+        })
+      )
+
       await _waitForTransactionConfirmation(hash, web3)
       toastr.success('Transaction confirmed!')
     } catch (_err) {
+      _dispatch(
+        setLoading({
+          isLoading: false
+        })
+      )
       console.log(_err)
       toastr.error(_err.message ? _err.message : _err)
     }
